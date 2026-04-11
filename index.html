@@ -5,74 +5,77 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project Memo</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#1a1a1a;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:24px;min-height:100vh}
+body{background:#2c2620;color:#e8e0d0;font-family:'Inter',sans-serif;padding:32px;min-height:100vh}
 .wrap{max-width:700px;margin:0 auto}
-h1{font-size:16px;font-weight:500;color:#888;margin-bottom:16px}
-.add-proj{display:flex;gap:8px;margin-bottom:16px}
-.add-proj input{flex:1;height:36px;background:#2a2a2a;border:1px solid #444;border-radius:8px;color:#e0e0e0;font-size:13px;padding:0 12px;outline:none}
-.add-proj input:focus{border-color:#666}
-.add-proj button{height:36px;padding:0 16px;background:#2a2a2a;border:1px solid #555;border-radius:8px;color:#e0e0e0;font-size:13px;cursor:pointer}
-.add-proj button:hover{background:#333}
-.projects{display:flex;flex-direction:column;gap:8px}
-.proj-card{background:#242424;border:1px solid #333;border-radius:10px;overflow:hidden}
-.proj-header{display:flex;align-items:center;gap:10px;padding:11px 15px;cursor:pointer;user-select:none}
-.proj-header:hover{background:#2c2c2c}
-.proj-arrow{font-size:10px;color:#666;transition:transform .15s}
+h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:#f0e8d8;margin-bottom:4px;letter-spacing:-0.3px}
+.subtitle{font-size:12px;color:#8a7e6e;margin-bottom:24px;letter-spacing:0.5px}
+.add-proj{display:flex;gap:8px;margin-bottom:20px}
+.add-proj input{flex:1;height:38px;background:#352e28;border:1px solid #4a3f35;border-radius:6px;color:#e8e0d0;font-size:13px;padding:0 12px;outline:none;font-family:'Inter',sans-serif}
+.add-proj input:focus{border-color:#8a7e6e}
+.add-proj input::placeholder{color:#5a5048}
+.add-proj button{height:38px;padding:0 18px;background:#4a3f35;border:1px solid #5a5048;border-radius:6px;color:#c8bfaf;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif}
+.add-proj button:hover{background:#5a5048}
+.projects{display:flex;flex-direction:column;gap:10px}
+.proj-card{background:#332b24;border:1px solid #4a3f35;border-radius:8px;overflow:hidden}
+.proj-header{display:flex;align-items:center;gap:10px;padding:13px 18px;cursor:pointer;user-select:none}
+.proj-header:hover{background:#3a3028}
+.proj-arrow{font-size:9px;color:#6a5e50;transition:transform .15s}
 .proj-arrow.open{transform:rotate(90deg)}
-.proj-name{flex:1;font-size:13px;font-weight:500;color:#ddd}
-.proj-count{font-size:11px;color:#555}
-.proj-del{font-size:11px;color:#555;cursor:pointer;padding:2px 4px}
-.proj-del:hover{color:#e05555}
-.proj-body{display:none;border-top:1px solid #333}
+.proj-name{flex:1;font-family:'Playfair Display',serif;font-size:14px;font-weight:500;color:#e0d8c8}
+.proj-count{font-size:11px;color:#6a5e50}
+.proj-del{font-size:11px;color:#6a5e50;cursor:pointer;padding:2px 4px}
+.proj-del:hover{color:#c07060}
+.proj-body{display:none;border-top:1px solid #4a3f35}
 .proj-body.open{display:block}
-.entry{border-bottom:1px solid #2a2a2a}
+.entry{border-bottom:1px solid #3a3028}
 .entry:last-child{border-bottom:none}
-.entry-row{display:flex;align-items:center;padding:9px 15px;cursor:pointer}
-.entry-row:hover{background:#2c2c2c}
-.entry-date{font-size:11px;color:#666;min-width:86px}
-.entry-title{flex:1;font-size:13px;color:#ddd}
-.entry-del{font-size:12px;color:#555;cursor:pointer;padding:0 3px}
-.entry-del:hover{color:#e05555}
-.entry-detail{display:none;padding:8px 15px 12px 15px;background:#1e1e1e;border-top:1px solid #2a2a2a}
+.entry-row{display:flex;align-items:center;padding:10px 18px;cursor:pointer}
+.entry-row:hover{background:#3a3028}
+.entry-date{font-size:11px;color:#6a5e50;min-width:88px;font-family:'Inter',sans-serif}
+.entry-title{flex:1;font-size:13px;color:#d8d0c0}
+.entry-del{font-size:12px;color:#5a5048;cursor:pointer;padding:0 3px}
+.entry-del:hover{color:#c07060}
+.entry-detail{display:none;padding:10px 18px 14px 18px;background:#2c2620;border-top:1px solid #3a3028}
 .entry-detail.open{display:block}
-.entry-edit-row{display:flex;gap:6px;margin-bottom:8px;padding-left:86px}
-.entry-edit-row input{flex:1;height:28px;background:#242424;border:1px solid #3a3a3a;border-radius:4px;color:#ddd;font-size:12px;padding:0 8px;outline:none}
-.entry-edit-row input:focus{border-color:#555}
-.entry-toolbar{display:flex;gap:4px;margin-bottom:6px;padding-left:86px;flex-wrap:wrap;align-items:center;position:relative}
-.entry-toolbar button{height:24px;padding:0 8px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:4px;color:#aaa;font-size:11px;cursor:pointer}
-.entry-toolbar button:hover{background:#333;color:#ddd}
-.entry-toolbar .sep{width:1px;height:16px;background:#3a3a3a;margin:0 2px}
-.color-trigger{width:22px;height:22px;border-radius:4px;border:1px solid #3a3a3a;background:#2a2a2a;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa;position:relative}
-.color-trigger:hover{background:#333}
-.color-palette{display:none;position:absolute;top:28px;left:0;background:#2a2a2a;border:1px solid #444;border-radius:6px;padding:8px;z-index:100;width:180px}
+.entry-edit-row{display:flex;gap:6px;margin-bottom:8px;padding-left:88px}
+.entry-edit-row input{flex:1;height:28px;background:#332b24;border:1px solid #4a3f35;border-radius:4px;color:#d8d0c0;font-size:12px;padding:0 8px;outline:none;font-family:'Inter',sans-serif}
+.entry-edit-row input:focus{border-color:#8a7e6e}
+.entry-toolbar{display:flex;gap:4px;margin-bottom:8px;padding-left:88px;flex-wrap:wrap;align-items:center;position:relative}
+.entry-toolbar button{height:24px;padding:0 8px;background:#332b24;border:1px solid #4a3f35;border-radius:3px;color:#8a7e6e;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif}
+.entry-toolbar button:hover{background:#3a3028;color:#c8bfaf}
+.entry-toolbar .sep{width:1px;height:14px;background:#4a3f35;margin:0 2px}
+.color-trigger{width:22px;height:22px;border-radius:3px;border:1px solid #4a3f35;background:#332b24;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:#8a7e6e}
+.color-trigger:hover{background:#3a3028}
+.color-palette{display:none;position:absolute;top:28px;left:0;background:#332b24;border:1px solid #4a3f35;border-radius:6px;padding:8px;z-index:100;width:180px}
 .color-palette.show{display:block}
 .palette-row{display:flex;gap:3px;margin-bottom:3px}
 .palette-row:last-child{margin-bottom:0}
 .pc{width:18px;height:18px;border-radius:2px;cursor:pointer;border:1px solid rgba(255,255,255,0.08)}
-.pc:hover{transform:scale(1.2);border-color:rgba(255,255,255,0.3)}
-.entry-content{margin-left:86px;min-height:20px;outline:none;color:#999;font-size:12px;line-height:1.65;font-family:inherit;word-break:break-word}
-.entry-content b{color:#ddd}
-.entry-content i{color:#bbb}
-.entry-content u{color:#bbb}
-.save-btn{margin-left:86px;margin-top:8px;height:26px;padding:0 14px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:4px;color:#aaa;font-size:11px;cursor:pointer}
-.save-btn:hover{background:#333;color:#ddd}
-.entry-add{padding:10px 15px 12px;background:#1e1e1e;border-top:1px solid #2a2a2a}
-.entry-add-date{width:100%;height:32px;background:#242424;border:1px solid #3a3a3a;border-radius:6px;color:#aaa;font-size:12px;padding:0 10px;outline:none;margin-bottom:7px}
+.pc:hover{transform:scale(1.2)}
+.entry-content{margin-left:88px;min-height:20px;outline:none;color:#a89e8e;font-size:12px;line-height:1.7;font-family:'Inter',sans-serif;word-break:break-word}
+.save-btn{display:block;margin-left:88px;margin-top:10px;height:26px;padding:0 14px;background:#4a3f35;border:1px solid #5a5048;border-radius:4px;color:#c8bfaf;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif}
+.save-btn:hover{background:#5a5048}
+.entry-add{padding:12px 18px 14px;background:#2c2620;border-top:1px solid #3a3028}
+.entry-add-date{width:100%;height:32px;background:#332b24;border:1px solid #4a3f35;border-radius:5px;color:#a89e8e;font-size:12px;padding:0 10px;outline:none;margin-bottom:7px;font-family:'Inter',sans-serif}
 .entry-add-row{display:flex;gap:6px}
-.entry-add-row input{flex:1;height:32px;background:#242424;border:1px solid #3a3a3a;border-radius:6px;color:#ddd;font-size:12px;padding:0 10px;outline:none}
-.entry-add-row input:focus{border-color:#555}
-.entry-add-row button{height:32px;padding:0 14px;background:#242424;border:1px solid #3a3a3a;border-radius:6px;color:#ddd;font-size:12px;cursor:pointer;white-space:nowrap}
-.entry-add-row button:hover{background:#2c2c2c}
-.empty{font-size:12px;color:#555;padding:10px 15px}
-.status{text-align:center;padding:40px;color:#555;font-size:13px}
-.toast{position:fixed;bottom:20px;right:20px;background:#2a2a2a;border:1px solid #444;color:#ddd;padding:9px 14px;border-radius:8px;font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none}
+.entry-add-row input{flex:1;height:32px;background:#332b24;border:1px solid #4a3f35;border-radius:5px;color:#d8d0c0;font-size:12px;padding:0 10px;outline:none;font-family:'Inter',sans-serif}
+.entry-add-row input:focus{border-color:#8a7e6e}
+.entry-add-row input::placeholder{color:#5a5048}
+.entry-add-row button{height:32px;padding:0 14px;background:#4a3f35;border:1px solid #5a5048;border-radius:5px;color:#c8bfaf;font-size:12px;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif}
+.entry-add-row button:hover{background:#5a5048}
+.empty{font-size:12px;color:#5a5048;padding:12px 18px}
+.status{text-align:center;padding:40px;color:#5a5048;font-size:13px}
+.toast{position:fixed;bottom:20px;right:20px;background:#332b24;border:1px solid #4a3f35;color:#c8bfaf;padding:9px 14px;border-radius:6px;font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none;font-family:'Inter',sans-serif}
 .toast.show{opacity:1}
+.credit{position:fixed;bottom:16px;left:16px;font-size:10px;color:#4a3f35;font-family:'Inter',sans-serif}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Project Memo</h1>
+  <p class="subtitle">Created by H.G. Lee, KICPA</p>
   <div class="add-proj">
     <input type="text" id="projInput" placeholder="새 프로젝트명..." onkeydown="if(event.key==='Enter')addProj()">
     <button onclick="addProj()">+ 추가</button>
@@ -80,7 +83,6 @@ h1{font-size:16px;font-weight:500;color:#888;margin-bottom:16px}
   <div class="projects" id="projects"><div class="status">불러오는 중...</div></div>
 </div>
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:16px;left:16px;font-size:10px;color:#444">Created by H.G. Lee, KICPA</div>
 
 <script>
 const today=()=>new Date().toISOString().slice(0,10);
@@ -114,8 +116,7 @@ function fmtSize(size){document.execCommand('fontSize',false,size);}
 function fmtColor(color){document.execCommand('foreColor',false,color);}
 
 function togglePalette(id){
-  const p=document.getElementById('pal_'+id);
-  p.classList.toggle('show');
+  document.getElementById('pal_'+id).classList.toggle('show');
 }
 
 document.addEventListener('click',function(e){
@@ -124,12 +125,8 @@ document.addEventListener('click',function(e){
   }
 });
 
-function escHTML(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function escAttr(s){
-  return String(s).replace(/'/g,'&#39;');
-}
+function escHTML(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escAttr(s){return String(s).replace(/'/g,'&#39;');}
 
 function paletteHTML(eid){
   return `<div class="color-palette" id="pal_${eid}">
@@ -220,8 +217,7 @@ async function saveEntry(eid){
     const e=p.entries.find(x=>x.id===eid);
     if(e){e.title=title;e.date=date;e.detail=detail;break;}
   }
-  render();
-  showToast('저장됨');
+  render();showToast('저장됨');
 }
 
 async function addProj(){
