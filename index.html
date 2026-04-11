@@ -1,3 +1,6 @@
+전체 코드예요. GitHub `index.html` 전체 교체해줘요.
+
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -36,10 +39,18 @@ h1{font-size:16px;font-weight:500;color:#888;margin-bottom:16px}
 .entry-del:hover{color:#e05555}
 .entry-detail{display:none;padding:8px 15px 12px 15px;background:#1e1e1e;border-top:1px solid #2a2a2a}
 .entry-detail.open{display:block}
-.entry-toolbar{display:flex;gap:4px;margin-bottom:6px;padding-left:86px;flex-wrap:wrap}
+.entry-toolbar{display:flex;gap:4px;margin-bottom:6px;padding-left:86px;flex-wrap:wrap;align-items:center;position:relative}
 .entry-toolbar button{height:24px;padding:0 8px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:4px;color:#aaa;font-size:11px;cursor:pointer}
 .entry-toolbar button:hover{background:#333;color:#ddd}
-.entry-toolbar .sep{width:1px;background:#3a3a3a;margin:0 2px}
+.entry-toolbar .sep{width:1px;height:16px;background:#3a3a3a;margin:0 2px}
+.color-trigger{width:22px;height:22px;border-radius:4px;border:1px solid #3a3a3a;background:#2a2a2a;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa;position:relative}
+.color-trigger:hover{background:#333}
+.color-palette{display:none;position:absolute;top:28px;left:0;background:#2a2a2a;border:1px solid #444;border-radius:6px;padding:8px;z-index:100;width:180px}
+.color-palette.show{display:block}
+.palette-row{display:flex;gap:3px;margin-bottom:3px}
+.palette-row:last-child{margin-bottom:0}
+.pc{width:18px;height:18px;border-radius:2px;cursor:pointer;border:1px solid rgba(255,255,255,0.08)}
+.pc:hover{transform:scale(1.2);border-color:rgba(255,255,255,0.3)}
 .entry-content{margin-left:86px;min-height:20px;outline:none;color:#999;font-size:12px;line-height:1.65;font-family:inherit;word-break:break-word}
 .entry-content b{color:#ddd}
 .entry-content i{color:#bbb}
@@ -74,6 +85,16 @@ let projects=[];
 let openProjs=new Set();
 let openEntries=new Set();
 
+const palette=[
+  ['#ffffff','#f2f2f2','#d9d9d9','#bfbfbf','#a6a6a6','#808080','#595959','#404040','#262626','#0d0d0d'],
+  ['#ff0000','#ff4d4d','#ff9999','#ffcccc','#ffe6e6','#800000','#cc0000','#e60000','#ff3333','#ff8080'],
+  ['#ff8c00','#ffa64d','#ffbf80','#ffd9b3','#fff0e6','#7a4200','#b35c00','#cc6e00','#ff9933','#ffb366'],
+  ['#ffd700','#ffe066','#ffeb99','#fff5cc','#fffae6','#806a00','#b39500','#ccac00','#ffcc00','#ffd966'],
+  ['#008000','#4daf4d','#80c280','#b3d9b3','#e6f2e6','#004d00','#006600','#007a00','#00b300','#4dc44d'],
+  ['#0070c0','#3395d4','#66b0e0','#99ccec','#cce6f8','#003d6b','#005299','#0061b8','#0082db','#33a3e4'],
+  ['#7030a0','#9657b8','#b385cc','#d0b3e0','#ece6f5','#3d1a57','#572680','#6a2f9c','#8540b8','#a370cc'],
+];
+
 async function req(method,path,body){
   const r=await fetch('/api/'+path,{method,headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
   return r.json();
@@ -87,12 +108,30 @@ function showToast(msg){
 
 function fmt(cmd){document.execCommand(cmd,false,null);}
 function fmtSize(size){document.execCommand('fontSize',false,size);}
+function fmtColor(color){document.execCommand('foreColor',false,color);}
+
+function togglePalette(id){
+  const p=document.getElementById('pal_'+id);
+  p.classList.toggle('show');
+}
+
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.color-trigger')&&!e.target.closest('.color-palette')){
+    document.querySelectorAll('.color-palette.show').forEach(el=>el.classList.remove('show'));
+  }
+});
 
 function escHTML(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function escAttr(s){
   return String(s).replace(/'/g,'&#39;');
+}
+
+function paletteHTML(eid){
+  return `<div class="color-palette" id="pal_${eid}">
+    ${palette.map(row=>`<div class="palette-row">${row.map(c=>`<div class="pc" style="background:${c}" onmousedown="event.preventDefault();fmtColor('${c}');togglePalette('${eid}')"></div>`).join('')}</div>`).join('')}
+  </div>`;
 }
 
 async function load(){
@@ -133,6 +172,9 @@ function render(){
                 <button onmousedown="event.preventDefault();fmtSize(1)" style="font-size:9px">S</button>
                 <button onmousedown="event.preventDefault();fmtSize(3)" style="font-size:11px">M</button>
                 <button onmousedown="event.preventDefault();fmtSize(5)" style="font-size:13px">L</button>
+                <div class="sep"></div>
+                <div class="color-trigger" onclick="togglePalette('${escAttr(e.id)}')">A</div>
+                ${paletteHTML(escAttr(e.id))}
               </div>
               <div class="entry-content" contenteditable="true" onblur="saveDetail('${escAttr(e.id)}',this.innerHTML)">${e.detail||''}</div>
             </div>
@@ -217,3 +259,4 @@ load();
 </script>
 </body>
 </html>
+```
