@@ -151,6 +151,7 @@ function render(){
         <span class="proj-arrow ${openProjs.has(p.id)?'open':''}">&#9654;</span>
         <span class="proj-name">${escHTML(p.name)}</span>
         <span class="proj-count">${p.entries.length}개</span>
+        <span class="proj-del" onclick="event.stopPropagation();renameProj('${escAttr(p.id)}','${escAttr(p.name)}')">수정</span>
         <span class="proj-del" onclick="event.stopPropagation();delProj('${escAttr(p.id)}')">삭제</span>
       </div>
       <div class="proj-body ${openProjs.has(p.id)?'open':''}">
@@ -264,7 +265,19 @@ async function delEntry(pid,eid){
   openEntries.delete(eid);
   render();showToast('삭제됨');
 }
-
+async function renameProj(id, oldName){
+  const newName=prompt('프로젝트명 수정:', oldName);
+  if(!newName||newName===oldName)return;
+  showToast('수정 중...');
+  const r=await req('POST','projects',{name:newName, oldName:id});
+  if(r.id){
+    projects.find(p=>p.id===id).name=newName;
+    projects.find(p=>p.id===id).id=newName;
+    openProjs.add(newName);
+    openProjs.delete(id);
+    render();showToast('수정됨');
+  }
+}
 load();
 </script>
 </body>
