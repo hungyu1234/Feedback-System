@@ -36,6 +36,9 @@ h1{font-size:16px;font-weight:500;color:#888;margin-bottom:16px}
 .entry-del:hover{color:#e05555}
 .entry-detail{display:none;padding:8px 15px 12px 15px;background:#1e1e1e;border-top:1px solid #2a2a2a}
 .entry-detail.open{display:block}
+.entry-edit-row{display:flex;gap:6px;margin-bottom:8px;padding-left:86px}
+.entry-edit-row input{flex:1;height:28px;background:#242424;border:1px solid #3a3a3a;border-radius:4px;color:#ddd;font-size:12px;padding:0 8px;outline:none}
+.entry-edit-row input:focus{border-color:#555}
 .entry-toolbar{display:flex;gap:4px;margin-bottom:6px;padding-left:86px;flex-wrap:wrap;align-items:center;position:relative}
 .entry-toolbar button{height:24px;padding:0 8px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:4px;color:#aaa;font-size:11px;cursor:pointer}
 .entry-toolbar button:hover{background:#333;color:#ddd}
@@ -52,6 +55,8 @@ h1{font-size:16px;font-weight:500;color:#888;margin-bottom:16px}
 .entry-content b{color:#ddd}
 .entry-content i{color:#bbb}
 .entry-content u{color:#bbb}
+.save-btn{margin-left:86px;margin-top:8px;height:26px;padding:0 14px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:4px;color:#aaa;font-size:11px;cursor:pointer}
+.save-btn:hover{background:#333;color:#ddd}
 .entry-add{padding:10px 15px 12px;background:#1e1e1e;border-top:1px solid #2a2a2a}
 .entry-add-date{width:100%;height:32px;background:#242424;border:1px solid #3a3a3a;border-radius:6px;color:#aaa;font-size:12px;padding:0 10px;outline:none;margin-bottom:7px}
 .entry-add-row{display:flex;gap:6px}
@@ -67,7 +72,7 @@ h1{font-size:16px;font-weight:500;color:#888;margin-bottom:16px}
 </head>
 <body>
 <div class="wrap">
-  <h1 style="font-size:22px;margin-bottom:4px">Project Memo</h1>
+  <h1>Project Memo</h1>
   <div class="add-proj">
     <input type="text" id="projInput" placeholder="새 프로젝트명..." onkeydown="if(event.key==='Enter')addProj()">
     <button onclick="addProj()">+ 추가</button>
@@ -162,6 +167,10 @@ function render(){
               <span class="entry-del" onclick="event.stopPropagation();delEntry('${escAttr(p.id)}','${escAttr(e.id)}')">✕</span>
             </div>
             <div class="entry-detail ${openEntries.has(e.id)?'open':''}" id="ed_${escAttr(e.id)}">
+              <div class="entry-edit-row">
+                <input type="date" id="edate_${escAttr(e.id)}" value="${escHTML(e.date)}">
+                <input type="text" id="etitle_${escAttr(e.id)}" value="${escHTML(e.title)}" placeholder="제목">
+              </div>
               <div class="entry-toolbar">
                 <button onmousedown="event.preventDefault();fmt('bold')"><b>B</b></button>
                 <button onmousedown="event.preventDefault();fmt('italic')"><i>I</i></button>
@@ -174,7 +183,8 @@ function render(){
                 <div class="color-trigger" onclick="togglePalette('${escAttr(e.id)}')">A</div>
                 ${paletteHTML(escAttr(e.id))}
               </div>
-              <div class="entry-content" contenteditable="true" onblur="saveDetail('${escAttr(e.id)}',this.innerHTML)">${e.detail||''}</div>
+              <div class="entry-content" contenteditable="true" id="econtent_${escAttr(e.id)}">${e.detail||''}</div>
+              <button class="save-btn" onclick="saveEntry('${escAttr(e.id)}')">저장</button>
             </div>
           </div>`).join('')}
         <div class="entry-add">
@@ -197,9 +207,21 @@ function toggleProj(id){
 function toggleEntry(id){
   if(openEntries.has(id))openEntries.delete(id);else openEntries.add(id);
   render();
-  if(openEntries.has(id)){
-    setTimeout(()=>{const c=document.querySelector('#ed_'+id+' .entry-content');if(c)c.focus();},0);
+}
+
+async function saveEntry(eid){
+  const title=document.getElementById('etitle_'+eid).value.trim();
+  const date=document.getElementById('edate_'+eid).value;
+  const detail=document.getElementById('econtent_'+eid).innerHTML;
+  if(!title)return;
+  showToast('저장 중...');
+  await req('PATCH','entries/'+eid,{title,date,detail});
+  for(const p of projects){
+    const e=p.entries.find(x=>x.id===eid);
+    if(e){e.title=title;e.date=date;e.detail=detail;break;}
   }
+  render();
+  showToast('저장됨');
 }
 
 async function addProj(){
@@ -247,10 +269,6 @@ async function delEntry(pid,eid){
   p.entries=p.entries.filter(e=>e.id!==eid);
   openEntries.delete(eid);
   render();showToast('삭제됨');
-}
-
-async function saveDetail(eid,val){
-  await req('PATCH','entries/'+eid,{detail:val});
 }
 
 load();
