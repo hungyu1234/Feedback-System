@@ -32,26 +32,30 @@ module.exports = async (req, res) => {
     return res.json({ projects });
   }
 
-  if (req.method === 'POST') {
+if (req.method === 'POST') {
     const { name } = req.body;
-    const db = await notion.databases.retrieve({ database_id: DB_ID });
-    const existing = db.properties['프로젝트'].select.options.map(o => o.name);
-    if (!existing.includes(name)) {
-      await notion.databases.update({
-        database_id: DB_ID,
-        properties: {
-          '프로젝트': {
-            select: {
-              options: [
-                ...db.properties['프로젝트'].select.options,
-                { name }
-              ]
+    try {
+      const db = await notion.databases.retrieve({ database_id: DB_ID });
+      const existing = db.properties['프로젝트'].select.options.map(o => o.name);
+      if (!existing.includes(name)) {
+        await notion.databases.update({
+          database_id: DB_ID,
+          properties: {
+            '프로젝트': {
+              select: {
+                options: [
+                  ...db.properties['프로젝트'].select.options.map(o => ({ name: o.name, color: o.color })),
+                  { name }
+                ]
+              }
             }
           }
-        }
-      });
+        });
+      }
+      return res.json({ id: name });
+    } catch(e) {
+      return res.status(500).json({ error: e.message });
     }
-    return res.json({ id: name });
   }
 
   if (req.method === 'DELETE') {
