@@ -3,35 +3,204 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>프로젝트 피드백</title>
+<title>Feedback System</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#1a1a1a;color:#e0e0e0;min-height:100vh;padding:24px}
-.container{max-width:720px;margin:0 auto}
-.top{display:flex;gap:8px;margin-bottom:12px}
-.top input{flex:1;height:36px;font-size:13px;border:1px solid #444;border-radius:8px;padding:0 12px;background:#2a2a2a;color:#e0e0e0;outline:none}
-.top input:focus{border-color:#666}
-.top button{height:36px;font-size:13px;padding:0 16px;border:1px solid #555;border-radius:8px;background:#2a2a2a;color:#e0e0e0;cursor:pointer;white-space:nowrap}
-.top button:hover{background:#333}
-.proj-list{display:flex;flex-direction:column;gap:8px}
-.proj{background:#2a2a2a;border:1px solid #3a3a3a;border-radius:12px;overflow:hidden}
-.proj-head{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer}
-.proj-head:hover{background:#333}
-.arrow{font-size:11px;color:#888;transition:transform .18s;display:inline-block}
-.arrow.open{transform:rotate(180deg)}
-.proj-title{font-size:14px;font-weight:500;flex:1;color:#e0e0e0}
-.cnt{font-size:12px;color:#666}
-.del-proj{font-size:12px;color:#666;cursor:pointer}
-.del-proj:hover{color:#e05555}
-.proj-body{display:none}
-.proj-body.show{display:block}
-.fb-row{display:flex;align-items:center;border-top:1px solid #3a3a3a;padding:10px 16px;cursor:pointer}
-.fb-row:hover{background:#333}
-.fb-date{font-size:12px;color:#888;min-width:90px}
-.fb-title{font-size:13px;color:#e0e0e0;flex:1}
-.fb-del{font-size:13px;color:#666;cursor:pointer;padding:0 2px}
-.fb-del:hover{color:#e05555}
-.fb-detail{background:#1e1e1e;padding:10px 16px 12px 106px;border-top:1px solid #2a2a2a;display:none}
-.fb-detail.show{display:block}
-.fb-detail textarea{width:100%;font-size:12px;color:#aaa;background:transparent;border:none;outline:none;resize:none;line-height:1.6;font-family:inherit;overflow:hidden;display:block}
-.add-area{border-top:1px solid #3a3a3a;padding:10px
+body{background:#1a1a1a;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:24px;min-height:100vh}
+.wrap{max-width:700px;margin:0 auto}
+h1{font-size:16px;font-weight:500;color:#888;margin-bottom:16px}
+.add-proj{display:flex;gap:8px;margin-bottom:16px}
+.add-proj input{flex:1;height:36px;background:#2a2a2a;border:1px solid #444;border-radius:8px;color:#e0e0e0;font-size:13px;padding:0 12px;outline:none}
+.add-proj input:focus{border-color:#666}
+.add-proj button{height:36px;padding:0 16px;background:#2a2a2a;border:1px solid #555;border-radius:8px;color:#e0e0e0;font-size:13px;cursor:pointer}
+.add-proj button:hover{background:#333}
+.projects{display:flex;flex-direction:column;gap:8px}
+.proj-card{background:#242424;border:1px solid #333;border-radius:10px;overflow:hidden}
+.proj-header{display:flex;align-items:center;gap:10px;padding:11px 15px;cursor:pointer;user-select:none}
+.proj-header:hover{background:#2c2c2c}
+.proj-arrow{font-size:10px;color:#666;transition:transform .15s}
+.proj-arrow.open{transform:rotate(90deg)}
+.proj-name{flex:1;font-size:13px;font-weight:500;color:#ddd}
+.proj-count{font-size:11px;color:#555}
+.proj-del{font-size:11px;color:#555;cursor:pointer;padding:2px 4px}
+.proj-del:hover{color:#e05555}
+.proj-body{display:none;border-top:1px solid #333}
+.proj-body.open{display:block}
+.entry{border-bottom:1px solid #2a2a2a}
+.entry:last-child{border-bottom:none}
+.entry-row{display:flex;align-items:center;padding:9px 15px;cursor:pointer}
+.entry-row:hover{background:#2c2c2c}
+.entry-date{font-size:11px;color:#666;min-width:86px}
+.entry-title{flex:1;font-size:13px;color:#ddd}
+.entry-del{font-size:12px;color:#555;cursor:pointer;padding:0 3px}
+.entry-del:hover{color:#e05555}
+.entry-detail{display:none;padding:8px 15px 12px 101px;background:#1e1e1e;border-top:1px solid #2a2a2a}
+.entry-detail.open{display:block}
+.entry-detail textarea{width:100%;background:transparent;border:none;outline:none;color:#999;font-size:12px;line-height:1.65;font-family:inherit;resize:none;overflow:hidden}
+.entry-add{padding:10px 15px 12px;background:#1e1e1e;border-top:1px solid #2a2a2a}
+.entry-add-date{width:100%;height:32px;background:#242424;border:1px solid #3a3a3a;border-radius:6px;color:#aaa;font-size:12px;padding:0 10px;outline:none;margin-bottom:7px}
+.entry-add-row{display:flex;gap:6px}
+.entry-add-row input{flex:1;height:32px;background:#242424;border:1px solid #3a3a3a;border-radius:6px;color:#ddd;font-size:12px;padding:0 10px;outline:none}
+.entry-add-row input:focus{border-color:#555}
+.entry-add-row button{height:32px;padding:0 14px;background:#242424;border:1px solid #3a3a3a;border-radius:6px;color:#ddd;font-size:12px;cursor:pointer;white-space:nowrap}
+.entry-add-row button:hover{background:#2c2c2c}
+.empty{font-size:12px;color:#555;padding:10px 15px}
+.status{text-align:center;padding:40px;color:#555;font-size:13px}
+.toast{position:fixed;bottom:20px;right:20px;background:#2a2a2a;border:1px solid #444;color:#ddd;padding:9px 14px;border-radius:8px;font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Feedback System</h1>
+  <div class="add-proj">
+    <input type="text" id="projInput" placeholder="새 프로젝트명..." onkeydown="if(event.key==='Enter')addProj()">
+    <button onclick="addProj()">+ 추가</button>
+  </div>
+  <div class="projects" id="projects"><div class="status">불러오는 중...</div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const today=()=>new Date().toISOString().slice(0,10);
+let projects=[];
+let openProjs=new Set();
+let openEntries=new Set();
+
+async function req(method,path,body){
+  const r=await fetch('/api/'+path,{method,headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+  return r.json();
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+function resizeTA(el){
+  el.style.height='auto';
+  el.style.height=el.scrollHeight+'px';
+}
+
+async function load(){
+  try{
+    const r=await req('GET','projects');
+    projects=r.projects||[];
+    render();
+  }catch(e){
+    document.getElementById('projects').innerHTML='<div class="status">불러오기 실패. 새로고침 해보세요.</div>';
+  }
+}
+
+function escHTML(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s){
+  return String(s).replace(/'/g,'&#39;');
+}
+
+function render(){
+  const el=document.getElementById('projects');
+  if(!projects.length){el.innerHTML='<div class="status">프로젝트를 추가해보세요</div>';return;}
+  el.innerHTML=projects.map(p=>`
+    <div class="proj-card">
+      <div class="proj-header" onclick="toggleProj('${escAttr(p.id)}')">
+        <span class="proj-arrow ${openProjs.has(p.id)?'open':''}">&#9654;</span>
+        <span class="proj-name">${escHTML(p.name)}</span>
+        <span class="proj-count">${p.entries.length}개</span>
+        <span class="proj-del" onclick="event.stopPropagation();delProj('${escAttr(p.id)}')">삭제</span>
+      </div>
+      <div class="proj-body ${openProjs.has(p.id)?'open':''}">
+        ${p.entries.length===0?'<div class="empty">피드백 없음</div>':p.entries.map(e=>`
+          <div class="entry">
+            <div class="entry-row" onclick="toggleEntry('${escAttr(e.id)}')">
+              <span class="entry-date">${escHTML(e.date)}</span>
+              <span class="entry-title">${escHTML(e.title)}</span>
+              <span class="entry-del" onclick="event.stopPropagation();delEntry('${escAttr(p.id)}','${escAttr(e.id)}')">✕</span>
+            </div>
+            <div class="entry-detail ${openEntries.has(e.id)?'open':''}" id="ed_${escAttr(e.id)}">
+              <textarea onblur="saveDetail('${escAttr(e.id)}',this.value)" oninput="resizeTA(this)">${escHTML(e.detail||'')}</textarea>
+            </div>
+          </div>`).join('')}
+        <div class="entry-add">
+          <input type="date" class="entry-add-date" id="date_${escAttr(p.id)}" value="${today()}">
+          <div class="entry-add-row">
+            <input type="text" id="ttl_${escAttr(p.id)}" placeholder="제목" onkeydown="if(event.key==='Enter')addEntry('${escAttr(p.id)}')">
+            <input type="text" id="dtl_${escAttr(p.id)}" placeholder="내용 (선택)" onkeydown="if(event.key==='Enter')addEntry('${escAttr(p.id)}')">
+            <button onclick="addEntry('${escAttr(p.id)}')">추가</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+  setTimeout(()=>document.querySelectorAll('.entry-detail.open textarea').forEach(resizeTA),0);
+}
+
+function toggleProj(id){
+  if(openProjs.has(id))openProjs.delete(id);else openProjs.add(id);
+  render();
+}
+
+function toggleEntry(id){
+  if(openEntries.has(id))openEntries.delete(id);else openEntries.add(id);
+  render();
+  if(openEntries.has(id)){
+    setTimeout(()=>{const ta=document.querySelector('#ed_'+id+' textarea');if(ta)resizeTA(ta);},0);
+  }
+}
+
+async function addProj(){
+  const el=document.getElementById('projInput');
+  const name=el.value.trim();
+  if(!name)return;
+  showToast('추가 중...');
+  const r=await req('POST','projects',{name});
+  if(r.id){
+    projects.push({id:r.id,name,entries:[]});
+    openProjs.add(r.id);
+    el.value='';
+    render();
+    showToast('프로젝트 추가됨');
+  }else{
+    showToast('추가 실패: '+(r.error||'오류'));
+  }
+}
+
+async function delProj(id){
+  if(!confirm('프로젝트를 삭제할까요?'))return;
+  await req('DELETE','projects',{name:id});
+  projects=projects.filter(p=>p.id!==id);
+  openProjs.delete(id);
+  render();showToast('삭제됨');
+}
+
+async function addEntry(pid){
+  const ttl=document.getElementById('ttl_'+pid).value.trim();
+  const dtl=document.getElementById('dtl_'+pid).value.trim();
+  const dt=document.getElementById('date_'+pid).value;
+  if(!ttl)return;
+  const r=await req('POST','entries',{projectId:pid,title:ttl,detail:dtl,date:dt});
+  if(r.id){
+    projects.find(p=>p.id===pid).entries.push({id:r.id,date:dt,title:ttl,detail:dtl});
+    document.getElementById('ttl_'+pid).value='';
+    document.getElementById('dtl_'+pid).value='';
+    render();showToast('추가됨');
+  }
+}
+
+async function delEntry(pid,eid){
+  await req('DELETE','entries/'+eid);
+  const p=projects.find(p=>p.id===pid);
+  p.entries=p.entries.filter(e=>e.id!==eid);
+  openEntries.delete(eid);
+  render();showToast('삭제됨');
+}
+
+async function saveDetail(eid,val){
+  await req('PATCH','entries/'+eid,{detail:val});
+}
+
+load();
+</script>
+</body>
+</html>
