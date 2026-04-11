@@ -25,13 +25,12 @@ module.exports = async (req, res) => {
   }
 
   if (req.method === 'PATCH') {
-    const { detail } = req.body;
-    await notion.pages.update({
-      page_id: id,
-      properties: {
-        '내용': { rich_text: [{ text: { content: detail || '' } }] },
-      },
-    });
+    const { title, date, detail } = req.body;
+    const props = {};
+    if (title) props['제목'] = { title: [{ text: { content: title } }] };
+    if (date) props['날짜'] = { date: { start: date } };
+    if (detail !== undefined) props['내용'] = { rich_text: [{ text: { content: detail || '' } }] };
+    await notion.pages.update({ page_id: id, properties: props });
     return res.json({ ok: true });
   }
 
