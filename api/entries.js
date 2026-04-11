@@ -17,9 +17,15 @@ module.exports = async (req, res) => {
       properties: {
         '제목': { title: [{ text: { content: title } }] },
         '날짜': { date: { start: date } },
-        '내용': { rich_text: [{ text: { content: detail || '' } }] },
         '프로젝트': { select: { name: projectId } },
       },
+      children: detail ? [{
+        object: 'block',
+        type: 'paragraph',
+        paragraph: {
+          rich_text: [{ type: 'text', text: { content: detail.slice(0, 2000) } }]
+        }
+      }] : []
     });
     return res.json({ id: page.id });
   }
@@ -29,8 +35,36 @@ module.exports = async (req, res) => {
     const props = {};
     if (title) props['제목'] = { title: [{ text: { content: title } }] };
     if (date) props['날짜'] = { date: { start: date } };
-    if (detail !== undefined) props['내용'] = { rich_text: [{ text: { content: detail || '' } }] };
-    await notion.pages.update({ page_id: id, properties: props });
+
+    if (Object.keys(props).length > 0) {
+      await notion.pages.update({ page_id: id, properties: props });
+    }
+
+    if (detail !== undefined) {
+      const blocks = await notion.blocks.children.list({ block_id: id });
+      await Promise.all(blocks.results.map(b => notion.blocks.delete({ block_id: b.id })));
+
+      const chunks = [];
+      let text = detail.replace(/<[^>]+>/g, '');
+      while (text.length > 0) {
+        chunks.push(text.slice(0, 2000));
+        text = text.slice(2000);
+      }
+
+      if (chunks.length > 0) {
+        await notion.blocks.children.append({
+          block_id: id,
+          children: chunks.map(chunk => ({
+            object: 'block',
+            type: 'paragraph',
+            paragraph: {
+              rich_text: [{ type: 'text', text: { content: chunk } }]
+            }
+          }))
+        });
+      }
+    }
+
     return res.json({ ok: true });
   }
 
