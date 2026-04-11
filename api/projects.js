@@ -14,9 +14,7 @@ module.exports = async (req, res) => {
       sorts: [{ property: '날짜', direction: 'descending' }],
     });
 
-    const entriesMap = {};
-    const projects = [];
-    const projectIndex = {};
+    const projectMap = {};
 
     for (const page of response.results) {
       const proj = page.properties['프로젝트']?.select?.name || '기타';
@@ -24,18 +22,19 @@ module.exports = async (req, res) => {
       const date = page.properties['날짜']?.date?.start || '';
       const detail = page.properties['내용']?.rich_text?.[0]?.plain_text || '';
 
-      if (!projectIndex[proj]) {
-        projectIndex[proj] = projects.length;
-        projects.push({ id: proj, name: proj, entries: [] });
+      if (!projectMap[proj]) {
+        projectMap[proj] = { id: proj, name: proj, entries: [] };
       }
-      projects[projectIndex[proj]].entries.push({ id: page.id, title, date, detail });
+      projectMap[proj].entries.push({ id: page.id, title, date, detail });
     }
 
+    const projects = Object.values(projectMap);
     return res.json({ projects });
   }
 
   if (req.method === 'POST') {
     const { name } = req.body;
+    // 프로젝트는 노션 Select 옵션이라 별도 저장 없이 이름만 반환
     return res.json({ id: name });
   }
 
