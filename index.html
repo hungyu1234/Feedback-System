@@ -135,8 +135,8 @@ async function addProj(){
 }
 
 async function delProj(id){
-  if(!confirm('삭제할까요?'))return;
-  await api('DELETE','projects/'+id);
+  if(!confirm('프로젝트 전체 삭제할까요?'))return;
+  await api('DELETE','projects',{name:id});
   data=data.filter(x=>x.id!==id);expanded.delete(id);render();toast('삭제됨');
 }
 
