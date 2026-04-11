@@ -34,7 +34,24 @@ module.exports = async (req, res) => {
 
   if (req.method === 'POST') {
     const { name } = req.body;
-    // 프로젝트는 노션 Select 옵션이라 별도 저장 없이 이름만 반환
+    // 노션 DB의 프로젝트 Select 옵션에 새 값 추가
+    const db = await notion.databases.retrieve({ database_id: DB_ID });
+    const existing = db.properties['프로젝트'].select.options.map(o => o.name);
+    if (!existing.includes(name)) {
+      await notion.databases.update({
+        database_id: DB_ID,
+        properties: {
+          '프로젝트': {
+            select: {
+              options: [
+                ...db.properties['프로젝트'].select.options,
+                { name }
+              ]
+            }
+          }
+        }
+      });
+    }
     return res.json({ id: name });
   }
 
