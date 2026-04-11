@@ -130,8 +130,15 @@ async function addProj(){
   const el=document.getElementById('newProj');
   const name=el.value.trim();
   if(!name)return;
+  toast('추가 중...');
   const res=await api('POST','projects',{name});
-  if(res.id){data.push({id:res.id,name,entries:[]});expanded.add(res.id);el.value='';render();toast('프로젝트 추가됨');}
+  if(res.id){
+    data.push({id:res.id,name,entries:[]});
+    expanded.add(res.id);
+    el.value='';
+    render();
+    toast('프로젝트 추가됨');
+  }
 }
 
 async function delProj(id){
