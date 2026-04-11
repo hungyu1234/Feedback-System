@@ -166,8 +166,8 @@ function render(){
             </div>
             <div class="entry-detail ${openEntries.has(e.id)?'open':''}" id="ed_${escAttr(e.id)}">
               <div class="entry-edit-row">
-                <input type="date" id="edate_${escAttr(e.id)}" value="${escHTML(e.date)}">
-                <input type="text" id="etitle_${escAttr(e.id)}" value="${escHTML(e.title)}" placeholder="제목">
+              <input type="date" id="edate_${escAttr(e.id)}" value="${escHTML(e.date)}" oninput="enableSave('${escAttr(e.id)}')">
+              <input type="text" id="etitle_${escAttr(e.id)}" value="${escHTML(e.title)}" placeholder="제목" oninput="enableSave('${escAttr(e.id)}')">
               </div>
               <div class="entry-toolbar">
                 <button onmousedown="event.preventDefault();fmt('bold')"><b>B</b></button>
@@ -181,8 +181,8 @@ function render(){
                 <div class="color-trigger" onclick="togglePalette('${escAttr(e.id)}')">A</div>
                 ${paletteHTML(escAttr(e.id))}
               </div>
-              <div class="entry-content" contenteditable="true" id="econtent_${escAttr(e.id)}">${e.detail||''}</div>
-              <button class="save-btn" onclick="saveEntry('${escAttr(e.id)}')">저장</button>
+              <div class="entry-content" contenteditable="true" id="econtent_${escAttr(e.id)}" oninput="enableSave('${escAttr(e.id)}')">${e.detail||''}</div>
+              <button class="save-btn" id="savebtn_${escAttr(e.id)}" onclick="saveEntry('${escAttr(e.id)}')" disabled>저장</button>
             </div>
           </div>`).join('')}
         <div class="entry-add">
@@ -267,6 +267,11 @@ async function delEntry(pid,eid){
   openEntries.delete(eid);
   render();showToast('삭제됨');
 }
+
+function enableSave(eid){
+  const btn=document.getElementById('savebtn_'+eid);
+  if(btn)btn.disabled=false;
+}  
 
 load();
 </script>
