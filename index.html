@@ -101,6 +101,10 @@ nav a:hover{color:#f0e8d8}
 .status{text-align:center;padding:40px;color:#a89e8e;font-size:13px}
 .toast{position:fixed;bottom:20px;right:20px;background:#2a2318;color:#e8e0d0;padding:9px 14px;border-radius:6px;font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none;font-family:'Noto Sans KR',sans-serif}
 .toast.show{opacity:1}
+.proj-card{transition:transform 0.2s ease,box-shadow 0.2s ease}
+.proj-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.06)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.page.active{animation:fadeUp 0.5s ease forwards}
 </style>
 </head>
 <body>
@@ -178,7 +182,11 @@ if(sessionStorage.getItem('isAdmin')==='true') isAdmin=true;
 function showPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
+  const page=document.getElementById('page-'+name);
+  page.classList.add('active');
+  page.style.animation='none';
+  page.offsetHeight;
+  page.style.animation='';
   document.getElementById('nav-'+name).classList.add('active');
 }
 
