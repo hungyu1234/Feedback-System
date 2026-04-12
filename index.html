@@ -138,6 +138,11 @@ function insertHr(){
 }  
 function enableSave(eid){const btn=document.getElementById('savebtn_'+eid);if(btn)btn.disabled=false;}
 
+function resetSize(){
+  document.execCommand('removeFormat',false,null);
+}
+
+  
 document.addEventListener('click',function(e){
   if(!e.target.closest('.color-trigger')&&!e.target.closest('.color-palette')){
     document.querySelectorAll('.color-palette.show').forEach(el=>el.classList.remove('show'));
