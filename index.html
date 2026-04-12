@@ -85,6 +85,24 @@ h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:#1e
 <div class="toast" id="toast"></div>
 
 <script>
+const ADMIN_PW = 'hglee1234'; // 원하는 비밀번호로 바꿔요
+let isAdmin = false;
+
+function checkAdmin(){
+  const pw = prompt('비밀번호를 입력하세요:');
+  if(pw === ADMIN_PW){
+    isAdmin = true;
+    sessionStorage.setItem('isAdmin','true');
+    render();
+    showToast('관리자 모드');
+  } else {
+    showToast('비밀번호가 틀렸어요');
+  }
+}
+
+// 페이지 로드 시 세션 확인
+if(sessionStorage.getItem('isAdmin')==='true') isAdmin = true;
+  
 const today=()=>new Date().toISOString().slice(0,10);
 let projects=[];
 let openProjs=new Set();
