@@ -27,13 +27,23 @@ module.exports = async (req, res) => {
     try {
       const updates = req.body;
       const response = await notion.databases.query({ database_id: DB_ID });
-      await Promise.all(response.results.map(page => {
-        const key = page.properties['key']?.title?.[0]?.plain_text || '';
-        if (updates[key] !== undefined) {
-          return notion.pages.update({
+      const existingKeys = response.results.map(p => p.properties['key']?.title?.[0]?.plain_text || '');
+
+      await Promise.all(Object.entries(updates).map(async ([key, value]) => {
+        const page = response.results.find(p => p.properties['key']?.title?.[0]?.plain_text === key);
+        if (page) {
+          await notion.pages.update({
             page_id: page.id,
             properties: {
-              'value': { rich_text: [{ text: { content: (updates[key]||'').slice(0,2000) } }] }
+              'value': { rich_text: [{ text: { content: (value||'').slice(0,2000) } }] }
+            }
+          });
+        } else {
+          await notion.pages.create({
+            parent: { database_id: DB_ID },
+            properties: {
+              'key': { title: [{ text: { content: key } }] },
+              'value': { rich_text: [{ text: { content: (value||'').slice(0,2000) } }] }
             }
           });
         }
