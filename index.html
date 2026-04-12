@@ -24,7 +24,7 @@ nav a:hover{color:#f0e8d8}
 
 /* Photo band */
 .photo-band{width:100%;height:260px;background:#2a2318;position:relative;overflow:hidden;display:flex;align-items:center;cursor:pointer}
-.photo-band img{position:absolute;right:0;top:0;height:100%;width:55%;object-fit:cover;object-position:top center}
+.photo-band img{position:absolute;right:0;top:0;height:100%;width:55%;object-fit:cover;object-position:center center}
 .photo-band .photo-hint{position:absolute;right:0;top:0;height:100%;width:55%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#4a3f35;background:#3a3028}
 .photo-text{padding:0 48px;position:relative;z-index:1}
 .photo-name{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#f0e8d8;letter-spacing:-0.5px;margin-bottom:6px}
@@ -142,11 +142,11 @@ nav a:hover{color:#f0e8d8}
     <div class="photo-text">
       <div class="photo-name">H.G. Lee</div>
       <div class="photo-sub" id="photoSub">KICPA · M&A Advisor</div>
-      <div class="photo-contact">
-        <div><b>T.</b><span id="contactT" contenteditable="false">-</span></div>
-        <div><b>F.</b><span id="contactF" contenteditable="false">-</span></div>
-        <div><b>E.</b><span id="contactE" contenteditable="false">-</span></div>
-      </div>
+<div class="photo-contact">
+  <div><b>T.</b><input id="contactT" value="-" style="background:transparent;border:none;outline:none;color:#6a5e50;font-size:11px;font-family:'Noto Sans KR',sans-serif;width:160px" ${isAdmin?'':'readonly'}></div>
+  <div><b>F.</b><input id="contactF" value="-" style="background:transparent;border:none;outline:none;color:#6a5e50;font-size:11px;font-family:'Noto Sans KR',sans-serif;width:160px" ${isAdmin?'':'readonly'}></div>
+  <div><b>E.</b><input id="contactE" value="-" style="background:transparent;border:none;outline:none;color:#6a5e50;font-size:11px;font-family:'Noto Sans KR',sans-serif;width:160px" ${isAdmin?'':'readonly'}></div>
+</div>
     </div>
     <img id="photoImg" src="" style="display:none">
     <div class="photo-hint" id="photoHint">클릭하여 사진 업로드</div>
@@ -350,9 +350,9 @@ async function uploadPhoto(input){
 async function saveAbout(){
   const data={
     intro:document.getElementById('sec-intro').innerHTML,
-    contactT:document.getElementById('contactT').innerText,
-    contactF:document.getElementById('contactF').innerText,
-    contactE:document.getElementById('contactE').innerText,
+    contactT:document.getElementById('contactT').value,
+    contactF:document.getElementById('contactF').value,
+    contactE:document.getElementById('contactE').value,
     career:JSON.stringify(aboutData.career),
     edu:JSON.stringify(aboutData.edu),
     activity:JSON.stringify(aboutData.activity),
@@ -369,9 +369,9 @@ async function loadAbout(){
   try{
     const data=await req('GET','about');
     if(data.intro)document.getElementById('sec-intro').innerHTML=data.intro;
-    if(data.contactT)document.getElementById('contactT').innerText=data.contactT;
-    if(data.contactF)document.getElementById('contactF').innerText=data.contactF;
-    if(data.contactE)document.getElementById('contactE').innerText=data.contactE;
+    if(data.contactT)document.getElementById('contactT').value=data.contactT;
+    if(data.contactF)document.getElementById('contactF').value=data.contactF;
+    if(data.contactE)document.getElementById('contactE').value=data.contactE;
     if(data.career){try{aboutData.career=JSON.parse(data.career);}catch(e){aboutData.career=[];}}
     if(data.edu){try{aboutData.edu=JSON.parse(data.edu);}catch(e){aboutData.edu=[];}}
     if(data.activity){try{aboutData.activity=JSON.parse(data.activity);}catch(e){aboutData.activity=[];}}
