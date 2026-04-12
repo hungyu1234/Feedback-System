@@ -80,6 +80,38 @@ h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:#1e
     <input type="text" id="projInput" placeholder="새 프로젝트명..." onkeydown="if(event.key==='Enter')addProj()">
     <button onclick="addProj()">+ 추가</button>
   </div>
+  
+  <div id="profileCard" class="proj-card" style="margin-bottom:16px;padding:4px 0">
+  <div style="display:flex;gap:16px;padding:10px 18px;border-bottom:1px solid #ede8de;align-items:flex-start">
+    <span style="font-size:11px;color:#8a7e6e;min-width:64px;padding-top:2px">경력</span>
+    <div id="pf-career" contenteditable="${isAdmin}" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()">
+    </div>
+  </div>
+  <div style="display:flex;gap:16px;padding:10px 18px;border-bottom:1px solid #ede8de;align-items:flex-start">
+    <span style="font-size:11px;color:#8a7e6e;min-width:64px;padding-top:2px">학력</span>
+    <div id="pf-edu" contenteditable="${isAdmin}" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()">
+    </div>
+  </div>
+  <div style="display:flex;gap:16px;padding:10px 18px;border-bottom:1px solid #ede8de;align-items:flex-start">
+    <span style="font-size:11px;color:#8a7e6e;min-width:64px;padding-top:2px">자격</span>
+    <div id="pf-cert" contenteditable="${isAdmin}" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()">
+    </div>
+  </div>
+  <div style="display:flex;gap:16px;padding:10px 18px;align-items:flex-start">
+    <span style="font-size:11px;color:#8a7e6e;min-width:64px;padding-top:2px">외부 활동</span>
+    <div id="pf-activity" contenteditable="${isAdmin}" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()">
+    </div>
+  </div>
+</div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <div class="projects" id="projects"><div class="status">불러오는 중...</div></div>
 </div>
 <div class="toast" id="toast"></div>
@@ -95,6 +127,9 @@ function checkAdmin(){
   sessionStorage.setItem('isAdmin','true');
   document.querySelector('.add-proj').style.display='flex';
   render();
+  ['pf-career','pf-edu','pf-cert','pf-activity'].forEach(id=>{
+  document.getElementById(id).contentEditable='true';
+});
   showToast('관리자 모드');
   } else {
     showToast('비밀번호가 틀렸어요');
@@ -159,11 +194,33 @@ function paletteHTML(eid){
   </div>`;
 }
 
+function saveProfile(){
+  const pf={
+    career:document.getElementById('pf-career').innerHTML,
+    edu:document.getElementById('pf-edu').innerHTML,
+    cert:document.getElementById('pf-cert').innerHTML,
+    activity:document.getElementById('pf-activity').innerHTML,
+  };
+  localStorage.setItem('profile',JSON.stringify(pf));
+}
+
+function loadProfile(){
+  const pf=JSON.parse(localStorage.getItem('profile')||'{}');
+  if(pf.career)document.getElementById('pf-career').innerHTML=pf.career;
+  if(pf.edu)document.getElementById('pf-edu').innerHTML=pf.edu;
+  if(pf.cert)document.getElementById('pf-cert').innerHTML=pf.cert;
+  if(pf.activity)document.getElementById('pf-activity').innerHTML=pf.activity;
+  ['pf-career','pf-edu','pf-cert','pf-activity'].forEach(id=>{
+    document.getElementById(id).contentEditable=isAdmin?'true':'false';
+  });
+}
+  
 async function load(){
   try{
     const r=await req('GET','projects');
     projects=r.projects||[];
     document.querySelector('.add-proj').style.display=isAdmin?'flex':'none';
+    loadProfile();
     render();
   }catch(e){
     document.getElementById('projects').innerHTML='<div class="status">불러오기 실패. 새로고침 해보세요.</div>';
