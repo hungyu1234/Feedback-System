@@ -115,6 +115,9 @@ function fmt(cmd){document.execCommand(cmd,false,null);}
 function fmtSize(size){document.execCommand('fontSize',false,size);}
 function fmtColor(color){document.execCommand('foreColor',false,color);}
 function togglePalette(id){document.getElementById('pal_'+id).classList.toggle('show');}
+function insertHr(){
+  document.execCommand('insertHTML',false,'<hr style="border:none;border-top:1px solid #d4cdc0;margin:8px 0;">');
+}  
 function enableSave(eid){const btn=document.getElementById('savebtn_'+eid);if(btn)btn.disabled=false;}
 
 document.addEventListener('click',function(e){
@@ -172,9 +175,11 @@ function render(){
                 <button onmousedown="event.preventDefault();fmt('italic')"><i>I</i></button>
                 <button onmousedown="event.preventDefault();fmt('underline')"><u>U</u></button>
                 <div class="sep"></div>
-                <button onmousedown="event.preventDefault();fmtSize(1)" style="font-size:9px">S</button>
-                <button onmousedown="event.preventDefault();fmtSize(3)" style="font-size:11px">M</button>
-                <button onmousedown="event.preventDefault();fmtSize(5)" style="font-size:13px">L</button>
+               <button onmousedown="event.preventDefault();fmtSize(2)" style="font-size:9px">S</button>
+               <button onmousedown="event.preventDefault();fmtSize(4)" style="font-size:11px">M</button>
+               <button onmousedown="event.preventDefault();fmtSize(6)" style="font-size:13px">L</button>
+               <div class="sep"></div>
+               <button onmousedown="event.preventDefault();insertHr()">—</button>
                 <div class="sep"></div>
                 <div class="color-trigger" onclick="togglePalette('${escAttr(e.id)}')">A</div>
                 ${paletteHTML(escAttr(e.id))}
