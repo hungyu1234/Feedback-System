@@ -22,63 +22,63 @@ nav a:hover{color:#f0e8d8}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .page.active{animation:fadeUp 0.5s ease forwards}
 
-/* About */
-.about-top{background:#2a2318;padding:28px 48px;display:flex;align-items:flex-end;justify-content:space-between}
-.about-name{font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:#f0e8d8;letter-spacing:-0.5px}
-.about-title{font-size:12px;color:#6a5e50;margin-top:6px;letter-spacing:0.5px}
-.about-contact{text-align:right;font-size:12px;color:#6a5e50;line-height:2.2}
-.about-contact b{color:#a89e8e;font-weight:400}
-
-.photo-band{width:100%;height:260px;background:#3a3028;overflow:hidden;position:relative;cursor:pointer}
-.photo-band img{width:100%;height:100%;object-fit:cover;object-position:top}
-.photo-band .photo-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#6a5e50;background:#3a3028}
+/* Photo band */
+.photo-band{width:100%;height:260px;background:#2a2318;position:relative;overflow:hidden;display:flex;align-items:center;cursor:pointer}
+.photo-band img{position:absolute;right:0;top:0;height:100%;width:55%;object-fit:cover;object-position:top center}
+.photo-band .photo-hint{position:absolute;right:0;top:0;height:100%;width:55%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#4a3f35;background:#3a3028}
+.photo-text{padding:0 48px;position:relative;z-index:1}
+.photo-name{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#f0e8d8;letter-spacing:-0.5px;margin-bottom:6px}
+.photo-sub{font-size:12px;color:#6a5e50;margin-bottom:16px;letter-spacing:0.3px}
+.photo-contact{font-size:11px;color:#6a5e50;line-height:2.2}
+.photo-contact b{color:#a89e8e;font-weight:400;margin-right:8px}
 .photo-upload-input{display:none}
 
-.about-body{display:flex;min-height:600px}
-.sidebar{width:200px;flex-shrink:0;padding:28px 20px;border-right:1px solid #d4cdc0;background:#faf7f2}
-.sidebar-nav{display:flex;flex-direction:column;gap:0;margin-bottom:28px}
-.sidebar-nav a{font-size:13px;color:#6a5e50;padding:8px 0;cursor:pointer;border-bottom:1px solid #ede8de;transition:color .15s}
-.sidebar-nav a:last-child{border-bottom:none}
-.sidebar-nav a:hover{color:#1e1a15}
-.sidebar-nav a.active{color:#1e1a15;font-weight:500}
-.sidebar-section-label{font-size:10px;color:#8a7e6e;margin-bottom:10px;letter-spacing:0.5px;margin-top:4px}
-.tags{display:flex;flex-wrap:wrap;gap:5px}
-.tag{font-size:11px;background:#ede8de;color:#4a3f35;padding:3px 9px;border-radius:3px;display:flex;align-items:center;gap:4px}
-.tag-del{cursor:pointer;color:#a89e8e;font-size:10px;display:none}
-.tag-del:hover{color:#c07060}
-.tag-add{display:none;margin-top:8px;width:100%;height:28px;background:#fff;border:1px solid #d4cdc0;border-radius:4px;font-size:11px;padding:0 8px;color:#2a2318;outline:none;font-family:'Noto Sans KR',sans-serif}
+/* Body */
+.about-body{display:flex;min-height:500px}
+.left-nav{width:150px;flex-shrink:0;padding:24px 0;border-right:1px solid #d4cdc0;background:#faf7f2}
+.left-nav a{display:block;font-size:12px;color:#6a5e50;padding:9px 20px;cursor:pointer;border-left:2px solid transparent;transition:all .15s}
+.left-nav a.active{color:#1e1a15;border-left:2px solid #2a2318;font-weight:500;background:#ede8de}
+.left-nav a:hover{color:#1e1a15;background:#ede8de}
 
-.main-content{flex:1;padding:36px 48px}
-.main-section{margin-bottom:36px}
-.main-section:last-child{margin-bottom:0}
-.main-lead{font-size:14px;font-weight:500;color:#1e1a15;line-height:1.9;font-family:'Playfair Display',serif;margin-bottom:16px;outline:none}
-.main-bio{font-size:13px;color:#4a3f35;line-height:1.9;outline:none;min-height:20px}
-.section-heading{font-size:13px;font-weight:500;color:#1e1a15;margin-bottom:12px;padding-bottom:8px;border-bottom:1.5px solid #2a2318;display:flex;align-items:center;justify-content:space-between}
-.profile-table{width:100%;border:1px solid #d4cdc0;border-radius:6px;overflow:hidden;background:#fff}
-.profile-row{display:flex;border-bottom:1px solid #ede8de}
-.profile-row:last-child{border-bottom:none}
-.profile-label{font-size:11px;color:#8a7e6e;width:80px;flex-shrink:0;padding:10px 14px;background:#faf7f2;border-right:1px solid #ede8de;display:flex;align-items:flex-start;padding-top:12px}
-.profile-val{flex:1;padding:10px 14px;font-size:12px;color:#2a2318;line-height:1.7;outline:none;min-height:20px}
+.main-col{flex:1;padding:36px 48px}
+.intro-text{font-size:13px;color:#2a2318;line-height:1.95;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid #d4cdc0;outline:none;min-height:20px}
+.section{margin-bottom:28px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sec-title{font-size:15px;font-weight:500;color:#1e1a15;font-family:'Playfair Display',serif}
+.sec-add{font-size:11px;color:#8a7e6e;cursor:pointer;padding:2px 8px;background:#ede8de;border-radius:3px;display:none}
+.career-row{display:flex;gap:24px;padding:7px 0;border-bottom:1px solid #ede8de;align-items:center}
+.career-row:last-child{border-bottom:none}
+.career-year{font-size:12px;color:#6a5e50;min-width:100px;flex-shrink:0;outline:none}
+.career-desc{font-size:12px;color:#2a2318;flex:1;outline:none}
+.career-del{width:18px;height:18px;background:#ede8de;border:none;border-radius:3px;cursor:pointer;font-size:10px;color:#8a7e6e;display:none;flex-shrink:0}
+.career-del:hover{background:#d4cdc0;color:#c07060}
 
-.save-bar{display:none;padding:16px 48px;background:#faf7f2;border-top:1px solid #d4cdc0;position:sticky;bottom:0;justify-content:flex-end;gap:8px}
+.right-col{width:180px;flex-shrink:0;padding:28px 20px;border-left:1px solid #d4cdc0}
+.right-label{font-size:11px;font-weight:500;color:#1e1a15;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #d4cdc0}
+.right-tags{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.right-tag{font-size:12px;color:#4a3f35;padding:2px 0;display:flex;align-items:center;gap:4px}
+.right-tag::before{content:'· ';color:#8a7e6e}
+.right-tag-del{font-size:10px;color:#c0b0a0;cursor:pointer;display:none;margin-left:auto}
+.right-tag-del:hover{color:#c07060}
+.tag-input{display:none;width:100%;height:26px;background:#fff;border:1px solid #d4cdc0;border-radius:4px;font-size:11px;padding:0 8px;color:#2a2318;outline:none;margin-top:4px}
+
+.save-bar{display:none;padding:14px 48px;background:#faf7f2;border-top:1px solid #d4cdc0;justify-content:flex-end;gap:8px}
 .save-bar.show{display:flex}
-.btn-primary{height:32px;padding:0 20px;background:#2a2318;border:none;border-radius:5px;color:#e8e0d0;font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
-.btn-primary:disabled{opacity:0.3;cursor:not-allowed}
-.btn-secondary{height:32px;padding:0 16px;background:#ede8de;border:1px solid #d4cdc0;border-radius:5px;color:#4a3f35;font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+.btn-save{height:30px;padding:0 20px;background:#2a2318;border:none;border-radius:5px;color:#e8e0d0;font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+.btn-cancel{height:30px;padding:0 16px;background:#ede8de;border:1px solid #d4cdc0;border-radius:5px;color:#4a3f35;font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
 
 /* Memo */
 .memo-wrap{padding:48px 40px;max-width:760px;margin:0 auto}
-.memo-head{margin-bottom:24px}
-.memo-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:600;color:#1e1a15}
+.memo-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:600;color:#1e1a15;margin-bottom:24px}
 .add-proj{display:flex;gap:8px;margin-bottom:20px}
 .add-proj input{flex:1;height:38px;background:#ede8de;border:1px solid #d4cdc0;border-radius:6px;color:#2a2318;font-size:13px;padding:0 12px;outline:none;font-family:'Noto Sans KR',sans-serif}
 .add-proj input::placeholder{color:#a89e8e}
-.add-proj button{height:38px;padding:0 18px;background:#2a2318;border:none;border-radius:6px;color:#e8e0d0;font-size:13px;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+.add-proj button{height:38px;padding:0 18px;background:#2a2318;border:none;border-radius:6px;color:#e8e0d0;font-size:13px;cursor:pointer}
 .add-proj button:hover{background:#3a3028}
 .projects{display:flex;flex-direction:column;gap:10px}
 .proj-card{background:#fff;border:1px solid #d4cdc0;border-radius:8px;overflow:hidden;transition:transform 0.2s ease,box-shadow 0.2s ease}
 .proj-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.06)}
-.proj-header{display:flex;align-items:center;gap:10px;padding:13px 18px;cursor:pointer;user-select:none;background:#fff}
+.proj-header{display:flex;align-items:center;gap:10px;padding:13px 18px;cursor:pointer;user-select:none}
 .proj-header:hover{background:#f5f0e8}
 .proj-arrow{font-size:9px;color:#8a7e6e;transition:transform .15s}
 .proj-arrow.open{transform:rotate(90deg)}
@@ -99,7 +99,7 @@ nav a:hover{color:#f0e8d8}
 .entry-detail{display:none;padding:10px 18px 14px;background:#ede8de;border-top:1px solid #d4cdc0}
 .entry-detail.open{display:block}
 .entry-edit-row{display:flex;gap:6px;margin-bottom:8px;padding-left:88px}
-.entry-edit-row input{flex:1;height:28px;background:#fff;border:1px solid #d4cdc0;border-radius:4px;color:#2a2318;font-size:12px;padding:0 8px;outline:none;font-family:'Noto Sans KR',sans-serif}
+.entry-edit-row input{flex:1;height:28px;background:#fff;border:1px solid #d4cdc0;border-radius:4px;color:#2a2318;font-size:12px;padding:0 8px;outline:none}
 .entry-toolbar{display:flex;gap:4px;margin-bottom:8px;padding-left:88px;flex-wrap:wrap;align-items:center;position:relative}
 .entry-toolbar button{height:24px;padding:0 8px;background:#fff;border:1px solid #d4cdc0;border-radius:3px;color:#6a5e50;font-size:11px;cursor:pointer}
 .entry-toolbar button:hover{background:#f0ebe0}
@@ -138,82 +138,83 @@ nav a:hover{color:#f0e8d8}
 
 <!-- About Me -->
 <div class="page active" id="page-about">
-  <div class="about-top">
-    <div>
-      <div class="about-name" id="aboutName">H.G. Lee</div>
-      <div class="about-title" id="aboutTitle">KICPA · M&A Advisor</div>
-    </div>
-    <div class="about-contact">
-      <b>T.</b> <span id="contactT">-</span><br>
-      <b>E.</b> <span id="contactE">-</span>
-    </div>
-  </div>
-
   <div class="photo-band" id="photoBand" onclick="if(isAdmin)document.getElementById('photoInput').click()">
+    <div class="photo-text">
+      <div class="photo-name">H.G. Lee</div>
+      <div class="photo-sub" id="photoSub">KICPA · M&A Advisor</div>
+      <div class="photo-contact">
+        <div><b>T.</b><span id="contactT" contenteditable="false">-</span></div>
+        <div><b>F.</b><span id="contactF" contenteditable="false">-</span></div>
+        <div><b>E.</b><span id="contactE" contenteditable="false">-</span></div>
+      </div>
+    </div>
     <img id="photoImg" src="" style="display:none">
-    <span class="photo-hint" id="photoHint">사진을 업로드해주세요</span>
+    <div class="photo-hint" id="photoHint">클릭하여 사진 업로드</div>
   </div>
   <input type="file" id="photoInput" class="photo-upload-input" accept="image/*" onchange="uploadPhoto(this)">
 
   <div class="about-body">
-    <div class="sidebar">
-      <div class="sidebar-nav">
-        <a class="active" onclick="scrollTo('sec-intro')">소개</a>
-        <a onclick="scrollTo('sec-profile')">프로필</a>
-        <a onclick="scrollTo('sec-results')">주요 실적</a>
-      </div>
-      <div class="sidebar-section-label">관련 분야</div>
-      <div class="tags" id="tagList"></div>
-      <input type="text" class="tag-add" id="tagInput" placeholder="태그 추가..." onkeydown="if(event.key==='Enter')addTag()">
+    <div class="left-nav">
+      <a class="active" onclick="scrollToSec('sec-intro')">소개</a>
+      <a onclick="scrollToSec('sec-career')">경력</a>
+      <a onclick="scrollToSec('sec-edu')">학력</a>
+      <a onclick="scrollToSec('sec-activity')">주요활동</a>
+      <a onclick="scrollToSec('sec-cert')">자격취득</a>
     </div>
 
-    <div class="main-content">
-      <div class="main-section" id="sec-intro">
-        <div class="main-lead" id="bio" contenteditable="false" oninput="markChanged()"></div>
-        <div class="main-bio" id="bioSub" contenteditable="false" oninput="markChanged()"></div>
-      </div>
+    <div class="main-col">
+      <div id="sec-intro" class="intro-text" contenteditable="false" oninput="markChanged()"></div>
 
-      <div class="main-section" id="sec-profile">
-        <div class="section-heading">프로필</div>
-        <div class="profile-table">
-          <div class="profile-row">
-            <span class="profile-label">경력</span>
-            <div class="profile-val" id="pf-career" contenteditable="false" oninput="markChanged()"></div>
-          </div>
-          <div class="profile-row">
-            <span class="profile-label">학력</span>
-            <div class="profile-val" id="pf-edu" contenteditable="false" oninput="markChanged()"></div>
-          </div>
-          <div class="profile-row">
-            <span class="profile-label">자격</span>
-            <div class="profile-val" id="pf-cert" contenteditable="false" oninput="markChanged()"></div>
-          </div>
-          <div class="profile-row">
-            <span class="profile-label">외부 활동</span>
-            <div class="profile-val" id="pf-activity" contenteditable="false" oninput="markChanged()"></div>
-          </div>
+      <div id="sec-career" class="section">
+        <div class="sec-head">
+          <span class="sec-title">경력</span>
+          <span class="sec-add" onclick="addRow('career-list')">+ 추가</span>
         </div>
+        <div id="career-list"></div>
       </div>
 
-      <div class="main-section" id="sec-results">
-        <div class="section-heading">주요 실적</div>
-        <div class="profile-val" id="pf-results" contenteditable="false" oninput="markChanged()" style="background:#fff;border:1px solid #d4cdc0;border-radius:6px;padding:12px 14px;min-height:60px"></div>
+      <div id="sec-edu" class="section">
+        <div class="sec-head">
+          <span class="sec-title">학력</span>
+          <span class="sec-add" onclick="addRow('edu-list')">+ 추가</span>
+        </div>
+        <div id="edu-list"></div>
       </div>
+
+      <div id="sec-activity" class="section">
+        <div class="sec-head">
+          <span class="sec-title">주요활동</span>
+          <span class="sec-add" onclick="addRow('activity-list')">+ 추가</span>
+        </div>
+        <div id="activity-list"></div>
+      </div>
+
+      <div id="sec-cert" class="section">
+        <div class="sec-head">
+          <span class="sec-title">자격취득</span>
+          <span class="sec-add" onclick="addRow('cert-list')">+ 추가</span>
+        </div>
+        <div id="cert-list"></div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="right-label">관련 분야</div>
+      <div class="right-tags" id="tagList"></div>
+      <input type="text" class="tag-input" id="tagInput" placeholder="태그 추가..." onkeydown="if(event.key==='Enter')addTag()">
     </div>
   </div>
 
   <div class="save-bar" id="saveBar">
-    <button class="btn-secondary" onclick="cancelAbout()">취소</button>
-    <button class="btn-primary" id="btnSave" onclick="saveAbout()">저장</button>
+    <button class="btn-cancel" onclick="loadAbout()">취소</button>
+    <button class="btn-save" onclick="saveAbout()">저장</button>
   </div>
 </div>
 
 <!-- Project Memo -->
 <div class="page" id="page-memo">
   <div class="memo-wrap">
-    <div class="memo-head">
-      <div class="memo-title">Project Memo</div>
-    </div>
+    <div class="memo-title">Project Memo</div>
     <div class="add-proj" id="addProjWrap" style="display:none">
       <input type="text" id="projInput" placeholder="새 프로젝트명..." onkeydown="if(event.key==='Enter')addProj()">
       <button onclick="addProj()">+ 추가</button>
@@ -227,9 +228,10 @@ nav a:hover{color:#f0e8d8}
 <script>
 const ADMIN_PW='hglee1234';
 let isAdmin=false;
-let changed=false;
-let tags=[];
 if(sessionStorage.getItem('isAdmin')==='true') isAdmin=true;
+
+let tags=[];
+let aboutData={career:[],edu:[],activity:[],cert:[]};
 
 function showPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -240,6 +242,12 @@ function showPage(name){
   page.offsetHeight;
   page.style.animation='';
   document.getElementById('nav-'+name).classList.add('active');
+}
+
+function scrollToSec(id){
+  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.left-nav a').forEach(a=>a.classList.remove('active'));
+  event.target.classList.add('active');
 }
 
 function checkAdmin(){
@@ -256,24 +264,131 @@ function checkAdmin(){
 }
 
 function applyAdminMode(){
-  ['bio','bioSub','pf-career','pf-edu','pf-cert','pf-activity','pf-results'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.contentEditable='true';
+  document.getElementById('sec-intro').contentEditable='true';
+  ['contactT','contactF','contactE'].forEach(id=>{
+    document.getElementById(id).contentEditable='true';
   });
-  document.getElementById('addProjWrap').style.display='flex';
-  document.getElementById('photoBand').style.cursor='pointer';
-  document.querySelectorAll('.tag-del').forEach(el=>el.style.display='inline');
+  document.querySelectorAll('.sec-add').forEach(el=>el.style.display='block');
+  document.querySelectorAll('.career-del').forEach(el=>el.style.display='block');
+  document.querySelectorAll('.right-tag-del').forEach(el=>el.style.display='inline');
   document.getElementById('tagInput').style.display='block';
   document.getElementById('saveBar').classList.add('show');
+  document.getElementById('addProjWrap').style.display='flex';
+  document.getElementById('photoHint').textContent='클릭하여 사진 변경';
 }
 
-function markChanged(){
-  changed=true;
+function markChanged(){}
+
+function renderRows(listId,items){
+  const el=document.getElementById(listId);
+  el.innerHTML=items.map((item,i)=>`
+    <div class="career-row">
+      <span class="career-year" contenteditable="${isAdmin}" oninput="updateItem('${listId}',${i},'year',this.innerText)">${item.year||''}</span>
+      <span class="career-desc" contenteditable="${isAdmin}" oninput="updateItem('${listId}',${i},'desc',this.innerText)">${item.desc||''}</span>
+      <button class="career-del" style="display:${isAdmin?'block':'none'}" onclick="delRow('${listId}',${i})">✕</button>
+    </div>`).join('');
 }
 
-function cancelAbout(){
-  loadAbout();
-  changed=false;
+function getListKey(listId){
+  return listId.replace('-list','');
+}
+
+function updateItem(listId,i,field,val){
+  const key=getListKey(listId);
+  aboutData[key][i][field]=val;
+}
+
+function addRow(listId){
+  const key=getListKey(listId);
+  aboutData[key].push({year:'',desc:''});
+  renderRows(listId,aboutData[key]);
+  applyAdminMode();
+}
+
+function delRow(listId,i){
+  const key=getListKey(listId);
+  aboutData[key].splice(i,1);
+  renderRows(listId,aboutData[key]);
+  applyAdminMode();
+}
+
+function renderTags(){
+  document.getElementById('tagList').innerHTML=tags.map((t,i)=>`
+    <div class="right-tag">${t}<span class="right-tag-del" style="display:${isAdmin?'inline':''}" onclick="removeTag(${i})">✕</span></div>
+  `).join('');
+}
+
+function addTag(){
+  const el=document.getElementById('tagInput');
+  const val=el.value.trim();
+  if(!val)return;
+  tags.push(val);el.value='';
+  renderTags();
+}
+
+function removeTag(i){
+  tags.splice(i,1);renderTags();
+}
+
+async function uploadPhoto(input){
+  const file=input.files[0];
+  if(!file)return;
+  showToast('사진 업로드 중...');
+  const reader=new FileReader();
+  reader.onload=async e=>{
+    const r=await req('POST','upload',{image:e.target.result});
+    if(r.url){
+      document.getElementById('photoImg').src=r.url;
+      document.getElementById('photoImg').style.display='block';
+      document.getElementById('photoHint').style.display='none';
+      showToast('사진 업로드 완료');
+    }else showToast('업로드 실패');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveAbout(){
+  const data={
+    intro:document.getElementById('sec-intro').innerHTML,
+    contactT:document.getElementById('contactT').innerText,
+    contactF:document.getElementById('contactF').innerText,
+    contactE:document.getElementById('contactE').innerText,
+    career:JSON.stringify(aboutData.career),
+    edu:JSON.stringify(aboutData.edu),
+    activity:JSON.stringify(aboutData.activity),
+    cert:JSON.stringify(aboutData.cert),
+    tags:JSON.stringify(tags),
+    photo:document.getElementById('photoImg').src||'',
+  };
+  showToast('저장 중...');
+  await req('POST','about',data);
+  showToast('저장됨');
+}
+
+async function loadAbout(){
+  try{
+    const data=await req('GET','about');
+    if(data.intro)document.getElementById('sec-intro').innerHTML=data.intro;
+    if(data.contactT)document.getElementById('contactT').innerText=data.contactT;
+    if(data.contactF)document.getElementById('contactF').innerText=data.contactF;
+    if(data.contactE)document.getElementById('contactE').innerText=data.contactE;
+    if(data.career){try{aboutData.career=JSON.parse(data.career);}catch(e){aboutData.career=[];}}
+    if(data.edu){try{aboutData.edu=JSON.parse(data.edu);}catch(e){aboutData.edu=[];}}
+    if(data.activity){try{aboutData.activity=JSON.parse(data.activity);}catch(e){aboutData.activity=[];}}
+    if(data.cert){try{aboutData.cert=JSON.parse(data.cert);}catch(e){aboutData.cert=[];}}
+    if(data.tags){try{tags=JSON.parse(data.tags);}catch(e){tags=[];}}
+    renderRows('career-list',aboutData.career);
+    renderRows('edu-list',aboutData.edu);
+    renderRows('activity-list',aboutData.activity);
+    renderRows('cert-list',aboutData.cert);
+    renderTags();
+    if(data.photo&&data.photo!==''){
+      document.getElementById('photoImg').src=data.photo;
+      document.getElementById('photoImg').style.display='block';
+      document.getElementById('photoHint').style.display='none';
+    }
+  }catch(e){}
+  if(isAdmin)applyAdminMode();
 }
 
 const today=()=>new Date().toISOString().slice(0,10);
@@ -309,94 +424,6 @@ function togglePalette(id){document.getElementById('pal_'+id).classList.toggle('
 function enableSave(eid){const btn=document.getElementById('savebtn_'+eid);if(btn){btn.disabled=false;btn.style.opacity='1';}}
 function resetSize(){document.execCommand('removeFormat',false,null);}
 function insertHr(){document.execCommand('insertHTML',false,'<hr style="border:none;border-top:1px solid #d4cdc0;margin:8px 0;">');}
-
-function renderTags(){
-  const list=document.getElementById('tagList');
-  list.innerHTML=tags.map((t,i)=>`
-    <span class="tag">${t}<span class="tag-del" onclick="removeTag(${i})">✕</span></span>
-  `).join('');
-  if(isAdmin) document.querySelectorAll('.tag-del').forEach(el=>el.style.display='inline');
-}
-
-function addTag(){
-  const el=document.getElementById('tagInput');
-  const val=el.value.trim();
-  if(!val)return;
-  tags.push(val);
-  el.value='';
-  renderTags();
-  markChanged();
-}
-
-function removeTag(i){
-  tags.splice(i,1);
-  renderTags();
-  markChanged();
-}
-
-async function uploadPhoto(input){
-  const file=input.files[0];
-  if(!file)return;
-  showToast('사진 업로드 중...');
-  const reader=new FileReader();
-  reader.onload=async e=>{
-    const base64=e.target.result;
-    const r=await req('POST','upload',{image:base64});
-    if(r.url){
-      document.getElementById('photoImg').src=r.url;
-      document.getElementById('photoImg').style.display='block';
-      document.getElementById('photoHint').style.display='none';
-      markChanged();
-      showToast('사진 업로드 완료');
-    }else{
-      showToast('업로드 실패');
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-async function saveAbout(){
-  const data={
-    bio:document.getElementById('bio').innerHTML,
-    bioSub:document.getElementById('bioSub').innerHTML,
-    career:document.getElementById('pf-career').innerHTML,
-    edu:document.getElementById('pf-edu').innerHTML,
-    cert:document.getElementById('pf-cert').innerHTML,
-    activity:document.getElementById('pf-activity').innerHTML,
-    results:document.getElementById('pf-results').innerHTML,
-    photo:document.getElementById('photoImg').src||'',
-    tags:JSON.stringify(tags),
-    contactT:document.getElementById('contactT').innerText,
-    contactE:document.getElementById('contactE').innerText,
-  };
-  showToast('저장 중...');
-  await req('POST','about',data);
-  changed=false;
-  showToast('저장됨');
-}
-
-async function loadAbout(){
-  try{
-    const data=await req('GET','about');
-    if(data.bio)document.getElementById('bio').innerHTML=data.bio;
-    if(data.bioSub)document.getElementById('bioSub').innerHTML=data.bioSub;
-    if(data.career)document.getElementById('pf-career').innerHTML=data.career;
-    if(data.edu)document.getElementById('pf-edu').innerHTML=data.edu;
-    if(data.cert)document.getElementById('pf-cert').innerHTML=data.cert;
-    if(data.activity)document.getElementById('pf-activity').innerHTML=data.activity;
-    if(data.results)document.getElementById('pf-results').innerHTML=data.results;
-    if(data.contactT)document.getElementById('contactT').innerText=data.contactT;
-    if(data.contactE)document.getElementById('contactE').innerText=data.contactE;
-    if(data.tags){try{tags=JSON.parse(data.tags);}catch(e){tags=[];}}
-    renderTags();
-    if(data.photo&&data.photo!==''){
-      document.getElementById('photoImg').src=data.photo;
-      document.getElementById('photoImg').style.display='block';
-      document.getElementById('photoHint').style.display='none';
-    }
-  }catch(e){}
-  if(isAdmin) applyAdminMode();
-}
 
 document.addEventListener('click',function(e){
   if(!e.target.closest('.color-trigger')&&!e.target.closest('.color-palette')){
@@ -479,27 +506,15 @@ function render(){
     </div>`).join('');
 }
 
-function toggleProj(id){
-  if(openProjs.has(id))openProjs.delete(id);else openProjs.add(id);
-  render();
-}
-
-function toggleEntry(id){
-  if(openEntries.has(id))openEntries.delete(id);else openEntries.add(id);
-  render();
-}
+function toggleProj(id){if(openProjs.has(id))openProjs.delete(id);else openProjs.add(id);render();}
+function toggleEntry(id){if(openEntries.has(id))openEntries.delete(id);else openEntries.add(id);render();}
 
 async function renameProj(id,oldName){
   const newName=prompt('프로젝트명 수정:',oldName);
   if(!newName||newName===oldName)return;
   showToast('수정 중...');
   const r=await req('POST','projects',{name:newName,oldName:id});
-  if(r.id){
-    const p=projects.find(p=>p.id===id);
-    p.name=newName;p.id=newName;
-    openProjs.add(newName);openProjs.delete(id);
-    render();showToast('수정됨');
-  }
+  if(r.id){const p=projects.find(p=>p.id===id);p.name=newName;p.id=newName;openProjs.add(newName);openProjs.delete(id);render();showToast('수정됨');}
 }
 
 async function saveEntry(eid){
@@ -509,10 +524,7 @@ async function saveEntry(eid){
   if(!title)return;
   showToast('저장 중...');
   await req('PATCH','entries/'+eid,{title,date,detail});
-  for(const p of projects){
-    const e=p.entries.find(x=>x.id===eid);
-    if(e){e.title=title;e.date=date;e.detail=detail;break;}
-  }
+  for(const p of projects){const e=p.entries.find(x=>x.id===eid);if(e){e.title=title;e.date=date;e.detail=detail;break;}}
   render();showToast('저장됨');
 }
 
@@ -522,22 +534,14 @@ async function addProj(){
   if(!name)return;
   showToast('추가 중...');
   const r=await req('POST','projects',{name});
-  if(r.id){
-    projects.push({id:r.id,name,entries:[]});
-    openProjs.add(r.id);
-    el.value='';
-    render();showToast('프로젝트 추가됨');
-  }else{
-    showToast('추가 실패: '+(r.error||'오류'));
-  }
+  if(r.id){projects.push({id:r.id,name,entries:[]});openProjs.add(r.id);el.value='';render();showToast('프로젝트 추가됨');}
+  else showToast('추가 실패: '+(r.error||'오류'));
 }
 
 async function delProj(id){
   if(!confirm('프로젝트를 삭제할까요?'))return;
   await req('DELETE','projects',{name:id});
-  projects=projects.filter(p=>p.id!==id);
-  openProjs.delete(id);
-  render();showToast('삭제됨');
+  projects=projects.filter(p=>p.id!==id);openProjs.delete(id);render();showToast('삭제됨');
 }
 
 async function addEntry(pid){
@@ -546,20 +550,12 @@ async function addEntry(pid){
   const dt=document.getElementById('date_'+pid).value;
   if(!ttl)return;
   const r=await req('POST','entries',{projectId:pid,title:ttl,detail:dtl,date:dt});
-  if(r.id){
-    projects.find(p=>p.id===pid).entries.push({id:r.id,date:dt,title:ttl,detail:dtl});
-    document.getElementById('ttl_'+pid).value='';
-    document.getElementById('dtl_'+pid).value='';
-    render();showToast('추가됨');
-  }
+  if(r.id){projects.find(p=>p.id===pid).entries.push({id:r.id,date:dt,title:ttl,detail:dtl});document.getElementById('ttl_'+pid).value='';document.getElementById('dtl_'+pid).value='';render();showToast('추가됨');}
 }
 
 async function delEntry(pid,eid){
   await req('DELETE','entries/'+eid);
-  const p=projects.find(p=>p.id===pid);
-  p.entries=p.entries.filter(e=>e.id!==eid);
-  openEntries.delete(eid);
-  render();showToast('삭제됨');
+  const p=projects.find(p=>p.id===pid);p.entries=p.entries.filter(e=>e.id!==eid);openEntries.delete(eid);render();showToast('삭제됨');
 }
 
 load();
