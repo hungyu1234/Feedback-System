@@ -58,6 +58,7 @@ h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:#1e
 .save-btn{display:block;margin-left:88px;margin-top:10px;height:26px;padding:0 14px;background:#2a2318;border:none;border-radius:4px;color:#e8e0d0;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif}
 .save-btn:hover{background:#3a3028}
 .save-btn:disabled{opacity:0.3;cursor:not-allowed}
+#pf-save:disabled{opacity:0.3;cursor:not-allowed}
 .entry-add{padding:12px 18px 14px;background:#f5f0e8;border-top:1px solid #d4cdc0}
 .entry-add-date{width:100%;height:32px;background:#ffffff;border:1px solid #d4cdc0;border-radius:5px;color:#4a3f35;font-size:12px;padding:0 10px;outline:none;margin-bottom:7px;font-family:'Inter',sans-serif}
 .entry-add-row{display:flex;gap:6px}
@@ -81,37 +82,29 @@ h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:#1e
     <button onclick="addProj()">+ 추가</button>
   </div>
   
-  <div id="profileCard" class="proj-card" style="margin-bottom:16px;padding:4px 0">
+<div id="profileCard" class="proj-card" style="margin-bottom:16px;padding:4px 0">
   <div style="display:flex;gap:16px;padding:10px 18px;border-bottom:1px solid #ede8de;align-items:flex-start">
     <span style="font-size:11px;color:#8a7e6e;min-width:64px;padding-top:2px">경력</span>
-    <div id="pf-career" contenteditable="${isAdmin}" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()">
-    </div>
+    <div id="pf-career" contenteditable="false" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()"></div>
   </div>
   <div style="display:flex;gap:16px;padding:10px 18px;border-bottom:1px solid #ede8de;align-items:flex-start">
     <span style="font-size:11px;color:#8a7e6e;min-width:64px;padding-top:2px">학력</span>
-    <div id="pf-edu" contenteditable="${isAdmin}" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()">
-    </div>
+    <div id="pf-edu" contenteditable="false" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()"></div>
   </div>
   <div style="display:flex;gap:16px;padding:10px 18px;border-bottom:1px solid #ede8de;align-items:flex-start">
     <span style="font-size:11px;color:#8a7e6e;min-width:64px;padding-top:2px">자격</span>
-    <div id="pf-cert" contenteditable="${isAdmin}" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()">
-    </div>
+    <div id="pf-cert" contenteditable="false" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()"></div>
   </div>
-  <div style="display:flex;gap:16px;padding:10px 18px;align-items:flex-start">
+  <div style="display:flex;gap:16px;padding:10px 18px;border-bottom:1px solid #ede8de;align-items:flex-start">
     <span style="font-size:11px;color:#8a7e6e;min-width:64px;padding-top:2px">외부 활동</span>
-    <div id="pf-activity" contenteditable="${isAdmin}" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()">
-    </div>
+    <div id="pf-activity" contenteditable="false" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()"></div>
+  </div>
+  <div style="padding:10px 18px 14px;display:flex;justify-content:flex-end">
+    <button id="pf-save" onclick="doSaveProfile()" disabled style="height:26px;padding:0 14px;background:#2a2318;border:none;border-radius:4px;color:#e8e0d0;font-size:11px;cursor:pointer;opacity:0.3">저장</button>
   </div>
 </div>
   
-  
-  
-  
-  
-  
-  
-  
-  
+
   <div class="projects" id="projects"><div class="status">불러오는 중...</div></div>
 </div>
 <div class="toast" id="toast"></div>
@@ -195,6 +188,10 @@ function paletteHTML(eid){
 }
 
 function saveProfile(){
+  document.getElementById('pf-save').disabled=false;
+}
+
+function doSaveProfile(){
   const pf={
     career:document.getElementById('pf-career').innerHTML,
     edu:document.getElementById('pf-edu').innerHTML,
@@ -202,6 +199,8 @@ function saveProfile(){
     activity:document.getElementById('pf-activity').innerHTML,
   };
   localStorage.setItem('profile',JSON.stringify(pf));
+  document.getElementById('pf-save').disabled=true;
+  showToast('저장됨');
 }
 
 function loadProfile(){
