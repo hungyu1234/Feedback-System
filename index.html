@@ -91,10 +91,11 @@ let isAdmin = false;
 function checkAdmin(){
   const pw = prompt('비밀번호를 입력하세요:');
   if(pw === ADMIN_PW){
-    isAdmin = true;
-    sessionStorage.setItem('isAdmin','true');
-    render();
-    showToast('관리자 모드');
+  isAdmin = true;
+  sessionStorage.setItem('isAdmin','true');
+  document.querySelector('.add-proj').style.display='flex';
+  render();
+  showToast('관리자 모드');
   } else {
     showToast('비밀번호가 틀렸어요');
   }
@@ -162,6 +163,7 @@ async function load(){
   try{
     const r=await req('GET','projects');
     projects=r.projects||[];
+    document.querySelector('.add-proj').style.display=isAdmin?'flex':'none';
     render();
   }catch(e){
     document.getElementById('projects').innerHTML='<div class="status">불러오기 실패. 새로고침 해보세요.</div>';
