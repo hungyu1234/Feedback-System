@@ -241,15 +241,23 @@ async function loadAbout(){
   if(isAdmin) applyAdminMode();
 }
 
-function uploadPhoto(input){
+async function uploadPhoto(input){
   const file=input.files[0];
   if(!file)return;
+  showToast('사진 업로드 중...');
   const reader=new FileReader();
-  reader.onload=e=>{
-    document.getElementById('photoImg').src=e.target.result;
-    document.getElementById('photoImg').style.display='block';
-    document.getElementById('photoPlaceholder').style.display='none';
-    markChanged();
+  reader.onload=async e=>{
+    const base64=e.target.result;
+    const r=await req('POST','upload',{image:base64});
+    if(r.url){
+      document.getElementById('photoImg').src=r.url;
+      document.getElementById('photoImg').style.display='block';
+      document.getElementById('photoPlaceholder').style.display='none';
+      markChanged();
+      showToast('사진 업로드 완료');
+    }else{
+      showToast('업로드 실패');
+    }
   };
   reader.readAsDataURL(file);
 }
