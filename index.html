@@ -208,7 +208,7 @@ function markChanged(){
   if(btn){btn.disabled=false;btn.classList.add('active');}
 }
 
-function saveAbout(){
+async function saveAbout(){
   const data={
     bio:document.getElementById('bio').innerHTML,
     career:document.getElementById('pf-career').innerHTML,
@@ -217,24 +217,27 @@ function saveAbout(){
     activity:document.getElementById('pf-activity').innerHTML,
     photo:document.getElementById('photoImg').src||'',
   };
-  localStorage.setItem('aboutData',JSON.stringify(data));
+  showToast('저장 중...');
+  await req('POST','about',data);
   const btn=document.getElementById('btnSaveAbout');
   btn.disabled=true;btn.classList.remove('active');
   showToast('저장됨');
 }
 
-function loadAbout(){
-  const data=JSON.parse(localStorage.getItem('aboutData')||'{}');
-  if(data.bio)document.getElementById('bio').innerHTML=data.bio;
-  if(data.career)document.getElementById('pf-career').innerHTML=data.career;
-  if(data.edu)document.getElementById('pf-edu').innerHTML=data.edu;
-  if(data.cert)document.getElementById('pf-cert').innerHTML=data.cert;
-  if(data.activity)document.getElementById('pf-activity').innerHTML=data.activity;
-  if(data.photo&&data.photo!==''){
-    document.getElementById('photoImg').src=data.photo;
-    document.getElementById('photoImg').style.display='block';
-    document.getElementById('photoPlaceholder').style.display='none';
-  }
+async function loadAbout(){
+  try{
+    const data=await req('GET','about');
+    if(data.bio)document.getElementById('bio').innerHTML=data.bio;
+    if(data.career)document.getElementById('pf-career').innerHTML=data.career;
+    if(data.edu)document.getElementById('pf-edu').innerHTML=data.edu;
+    if(data.cert)document.getElementById('pf-cert').innerHTML=data.cert;
+    if(data.activity)document.getElementById('pf-activity').innerHTML=data.activity;
+    if(data.photo&&data.photo!==''){
+      document.getElementById('photoImg').src=data.photo;
+      document.getElementById('photoImg').style.display='block';
+      document.getElementById('photoPlaceholder').style.display='none';
+    }
+  }catch(e){}
   if(isAdmin) applyAdminMode();
 }
 
