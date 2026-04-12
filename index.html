@@ -99,9 +99,9 @@ h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:#1e
     <span style="font-size:11px;color:#8a7e6e;min-width:64px;padding-top:2px">외부 활동</span>
     <div id="pf-activity" contenteditable="false" style="flex:1;font-size:12px;color:#2a2318;line-height:1.6;outline:none" oninput="saveProfile()"></div>
   </div>
-  <div style="padding:10px 18px 14px;display:flex;justify-content:flex-end">
-    <button id="pf-save" onclick="doSaveProfile()" disabled style="height:26px;padding:0 14px;background:#2a2318;border:none;border-radius:4px;color:#e8e0d0;font-size:11px;cursor:pointer;opacity:0.3">저장</button>
-  </div>
+  ${isAdmin?`<div style="padding:10px 18px 14px;display:flex;justify-content:flex-end">
+  <button id="pf-save" onclick="doSaveProfile()" disabled style="height:26px;padding:0 14px;background:#2a2318;border:none;border-radius:4px;color:#e8e0d0;font-size:11px;cursor:pointer;opacity:0.3">저장</button>
+</div>`:''}
 </div>
   
 
@@ -188,7 +188,8 @@ function paletteHTML(eid){
 }
 
 function saveProfile(){
-  document.getElementById('pf-save').disabled=false;
+  const btn=document.getElementById('pf-save');
+  if(btn){btn.disabled=false;btn.style.opacity='1';}
 }
 
 function doSaveProfile(){
@@ -199,7 +200,8 @@ function doSaveProfile(){
     activity:document.getElementById('pf-activity').innerHTML,
   };
   localStorage.setItem('profile',JSON.stringify(pf));
-  document.getElementById('pf-save').disabled=true;
+  const btn=document.getElementById('pf-save');
+  btn.disabled=true;btn.style.opacity='0.3';
   showToast('저장됨');
 }
 
@@ -209,9 +211,11 @@ function loadProfile(){
   if(pf.edu)document.getElementById('pf-edu').innerHTML=pf.edu;
   if(pf.cert)document.getElementById('pf-cert').innerHTML=pf.cert;
   if(pf.activity)document.getElementById('pf-activity').innerHTML=pf.activity;
-  ['pf-career','pf-edu','pf-cert','pf-activity'].forEach(id=>{
+ ['pf-career','pf-edu','pf-cert','pf-activity'].forEach(id=>{
     document.getElementById(id).contentEditable=isAdmin?'true':'false';
   });
+  const pfSave=document.getElementById('pf-save');
+  if(pfSave) pfSave.style.display=isAdmin?'block':'none';
 }
   
 async function load(){
