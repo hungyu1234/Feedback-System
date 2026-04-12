@@ -74,9 +74,9 @@ h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:#1e
 </head>
 <body>
 <div class="wrap">
-  <h1>Project Memo</h1>
+<h1 onclick="if(!isAdmin)checkAdmin()" style="cursor:pointer">Project Memo</h1>
   <p class="subtitle">Created by H.G. Lee, KICPA</p>
-  <div class="add-proj">
+  <div class="add-proj" style="display:${isAdmin?'flex':'none'}">
     <input type="text" id="projInput" placeholder="새 프로젝트명..." onkeydown="if(event.key==='Enter')addProj()">
     <button onclick="addProj()">+ 추가</button>
   </div>
@@ -172,8 +172,8 @@ function render(){
         <span class="proj-arrow ${openProjs.has(p.id)?'open':''}">&#9654;</span>
         <span class="proj-name">${escHTML(p.name)}</span>
         <span class="proj-count">${p.entries.length}개</span>
-        <span class="proj-del" onclick="event.stopPropagation();renameProj('${escAttr(p.id)}','${escAttr(p.name)}')">수정</span>
-        <span class="proj-del" onclick="event.stopPropagation();delProj('${escAttr(p.id)}')">삭제</span>
+        ${isAdmin?`<span class="proj-del" onclick="event.stopPropagation();renameProj('${escAttr(p.id)}','${escAttr(p.name)}')">수정</span>
+        <span class="proj-del" onclick="event.stopPropagation();delProj('${escAttr(p.id)}')">삭제</span>`:''}
       </div>
       <div class="proj-body ${openProjs.has(p.id)?'open':''}">
         ${p.entries.length===0?'<div class="empty">피드백 없음</div>':p.entries.map(e=>`
@@ -181,7 +181,7 @@ function render(){
             <div class="entry-row" onclick="toggleEntry('${escAttr(e.id)}')">
               <span class="entry-date">${escHTML(e.date)}</span>
               <span class="entry-title">${escHTML(e.title)}</span>
-              <span class="entry-del" onclick="event.stopPropagation();delEntry('${escAttr(p.id)}','${escAttr(e.id)}')">✕</span>
+              ${isAdmin?`<span class="entry-del" onclick="event.stopPropagation();delEntry('${escAttr(p.id)}','${escAttr(e.id)}')">✕</span>`:''}
             </div>
             <div class="entry-detail ${openEntries.has(e.id)?'open':''}" id="ed_${escAttr(e.id)}">
               <div class="entry-edit-row">
@@ -206,7 +206,7 @@ function render(){
               <button class="save-btn" id="savebtn_${escAttr(e.id)}" onclick="saveEntry('${escAttr(e.id)}')" disabled>저장</button>
             </div>
           </div>`).join('')}
-        <div class="entry-add">
+        <div class="entry-add" style="display:${isAdmin?'block':'none'}">
           <input type="date" class="entry-add-date" id="date_${escAttr(p.id)}" value="${today()}">
           <div class="entry-add-row">
             <input type="text" id="ttl_${escAttr(p.id)}" placeholder="제목" onkeydown="if(event.key==='Enter')addEntry('${escAttr(p.id)}')">
