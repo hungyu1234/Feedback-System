@@ -9,9 +9,14 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
+    const tab = req.query.tab || 'memo';
+    const filterConditions = [
+      { property: '탭', select: { equals: tab } }
+    ];
     const response = await notion.databases.query({
       database_id: DB_ID,
       sorts: [{ property: '날짜', direction: 'descending' }],
+      filter: { and: filterConditions },
     });
 
     const projectMap = {};
@@ -33,7 +38,7 @@ module.exports = async (req, res) => {
   }
 
   if (req.method === 'POST') {
-    const { name, oldName } = req.body;
+    const { name, oldName, tab = 'memo' } = req.body;
 
     try {
       const db = await notion.databases.retrieve({ database_id: DB_ID });
