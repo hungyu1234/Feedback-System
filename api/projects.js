@@ -10,14 +10,14 @@ module.exports = async (req, res) => {
 
   if (req.method === 'GET') {
     const tab = req.query.tab || 'memo';
-    const filterConditions = [
-      { property: '탭', select: { equals: tab } }
-    ];
-    const response = await notion.databases.query({
-      database_id: DB_ID,
-      sorts: [{ property: '날짜', direction: 'descending' }],
-      filter: { and: filterConditions },
-    });
+const queryOptions = {
+  database_id: DB_ID,
+  sorts: [{ property: '날짜', direction: 'descending' }],
+};
+if (tab !== 'memo') {
+  queryOptions.filter = { property: '탭', select: { equals: tab } };
+}
+const response = await notion.databases.query(queryOptions);
 
     const projectMap = {};
 
