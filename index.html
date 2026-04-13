@@ -132,6 +132,10 @@ nav a:hover{color:#f0e8d8}
 <nav>
   <a onclick="showPage('about')" id="nav-about" class="active">About Me</a>
   <a onclick="showPage('memo')" id="nav-memo">Project Memo</a>
+  <a onclick="showPage('book')" id="nav-book">Book</a>
+  <a onclick="showPage('workout')" id="nav-workout">Workout</a>
+
+  
   <div class="nav-spacer"></div>
   <span class="nav-editor" onclick="checkAdmin()">Editor</span>
 </nav>
@@ -220,6 +224,30 @@ nav a:hover{color:#f0e8d8}
       <button onclick="addProj()">+ 추가</button>
     </div>
     <div class="projects" id="projects"><div class="status">불러오는 중...</div></div>
+  </div>
+</div>
+
+<!-- Book -->
+<div class="page" id="page-book">
+  <div class="memo-wrap">
+    <div class="memo-title">Book</div>
+    <div class="add-proj" id="addProjWrapBook" style="display:none">
+      <input type="text" id="projInputBook" placeholder="새 항목..." onkeydown="if(event.key==='Enter')addProjGeneric('book')">
+      <button onclick="addProjGeneric('book')">+ 추가</button>
+    </div>
+    <div class="projects" id="projects-book"><div class="status">불러오는 중...</div></div>
+  </div>
+</div>
+
+<!-- Workout -->
+<div class="page" id="page-workout">
+  <div class="memo-wrap">
+    <div class="memo-title">Workout</div>
+    <div class="add-proj" id="addProjWrapWorkout" style="display:none">
+      <input type="text" id="projInputWorkout" placeholder="새 항목..." onkeydown="if(event.key==='Enter')addProjGeneric('workout')">
+      <button onclick="addProjGeneric('workout')">+ 추가</button>
+    </div>
+    <div class="projects" id="projects-workout"><div class="status">불러오는 중...</div></div>
   </div>
 </div>
 
