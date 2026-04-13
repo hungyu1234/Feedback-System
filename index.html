@@ -270,6 +270,19 @@ function showPage(name){
   page.offsetHeight;
   page.style.animation='';
   document.getElementById('nav-'+name).classList.add('active');
+  if(name==='book'||name==='workout'){
+    currentTab=name;
+    projects=projectsData[name];
+    loadTab(name);
+    if(isAdmin){
+      const wrapId=name==='book'?'addProjWrapBook':'addProjWrapWorkout';
+      document.getElementById(wrapId).style.display='flex';
+    }
+  } else if(name==='memo'){
+    currentTab='memo';
+    projects=projectsData.memo;
+    render('memo');
+  }
 }
 
 function scrollToSec(id){
@@ -302,6 +315,8 @@ function applyAdminMode(){
   document.getElementById('tagInput').style.display='block';
   document.getElementById('saveBar').classList.add('show');
   document.getElementById('addProjWrap').style.display='flex';
+  if(currentTab==='book')document.getElementById('addProjWrapBook').style.display='flex';
+  if(currentTab==='workout')document.getElementById('addProjWrapWorkout').style.display='flex';
   document.getElementById('photoHint').textContent='클릭하여 사진 변경';
 }
 
@@ -420,7 +435,9 @@ async function loadAbout(){
 }
 
 const today=()=>new Date().toISOString().slice(0,10);
+let projectsData={memo:[],book:[],workout:[]};
 let projects=[];
+let currentTab='memo';
 let openProjs=new Set();
 let openEntries=new Set();
 
@@ -471,18 +488,37 @@ function paletteHTML(eid){
 async function load(){
   try{
     const r=await req('GET','projects');
-    projects=r.projects||[];
+    projectsData.memo=r.projects||[];
+    projects=projectsData.memo;
     await loadAbout();
-    render();
+    render('memo');
   }catch(e){
     document.getElementById('projects').innerHTML='<div class="status">불러오기 실패. 새로고침 해보세요.</div>';
   }
 }
 
-function render(){
-  const el=document.getElementById('projects');
-  if(!projects.length){el.innerHTML='<div class="status">프로젝트를 추가해보세요</div>';return;}
-  el.innerHTML=projects.map(p=>`
+async function loadTab(tab){
+  currentTab=tab;
+  projects=projectsData[tab];
+  const elId='projects'+(tab==='memo'?'':'-'+tab);
+  const el=document.getElementById(elId);
+  el.innerHTML='<div class="status">불러오는 중...</div>';
+  try{
+    const r=await req('GET','projects?tab='+tab);
+    projectsData[tab]=r.projects||[];
+    projects=projectsData[tab];
+    render(tab);
+  }catch(e){
+    el.innerHTML='<div class="status">불러오기 실패.</div>';
+  }
+}
+
+function render(tab='memo'){
+  const elId='projects'+(tab==='memo'?'':'-'+tab);
+  const el=document.getElementById(elId);
+  const data=projectsData[tab]||[];
+  if(!data.length){el.innerHTML='<div class="status">항목을 추가해보세요</div>';return;}
+  el.innerHTML=data.map(p=>`
     <div class="proj-card">
       <div class="proj-header" onclick="toggleProj('${escAttr(p.id)}')">
         <span class="proj-arrow ${openProjs.has(p.id)?'open':''}">&#9654;</span>
@@ -534,15 +570,15 @@ function render(){
     </div>`).join('');
 }
 
-function toggleProj(id){if(openProjs.has(id))openProjs.delete(id);else openProjs.add(id);render();}
-function toggleEntry(id){if(openEntries.has(id))openEntries.delete(id);else openEntries.add(id);render();}
+function toggleProj(id){if(openProjs.has(id))openProjs.delete(id);else openProjs.add(id);render(currentTab);}
+function toggleEntry(id){if(openEntries.has(id))openEntries.delete(id);else openEntries.add(id);render(currentTab);}
 
 async function renameProj(id,oldName){
   const newName=prompt('프로젝트명 수정:',oldName);
   if(!newName||newName===oldName)return;
   showToast('수정 중...');
-  const r=await req('POST','projects',{name:newName,oldName:id});
-  if(r.id){const p=projects.find(p=>p.id===id);p.name=newName;p.id=newName;openProjs.add(newName);openProjs.delete(id);render();showToast('수정됨');}
+  const r=await req('POST','projects',{name:newName,oldName:id,tab:currentTab});
+  if(r.id){const p=projectsData[currentTab].find(p=>p.id===id);p.name=newName;p.id=newName;openProjs.add(newName);openProjs.delete(id);render(currentTab);showToast('수정됨');}
 }
 
 async function saveEntry(eid){
@@ -552,8 +588,8 @@ async function saveEntry(eid){
   if(!title)return;
   showToast('저장 중...');
   await req('PATCH','entries/'+eid,{title,date,detail});
-  for(const p of projects){const e=p.entries.find(x=>x.id===eid);if(e){e.title=title;e.date=date;e.detail=detail;break;}}
-  render();showToast('저장됨');
+  for(const p of projectsData[currentTab]){const e=p.entries.find(x=>x.id===eid);if(e){e.title=title;e.date=date;e.detail=detail;break;}}
+  render(currentTab);showToast('저장됨');
 }
 
 async function addProj(){
@@ -561,15 +597,26 @@ async function addProj(){
   const name=el.value.trim();
   if(!name)return;
   showToast('추가 중...');
-  const r=await req('POST','projects',{name});
-  if(r.id){projects.push({id:r.id,name,entries:[]});openProjs.add(r.id);el.value='';render();showToast('프로젝트 추가됨');}
+  const r=await req('POST','projects',{name,tab:'memo'});
+  if(r.id){projectsData.memo.push({id:r.id,name,entries:[]});openProjs.add(r.id);el.value='';render('memo');showToast('프로젝트 추가됨');}
+  else showToast('추가 실패: '+(r.error||'오류'));
+}
+
+async function addProjGeneric(tab){
+  const inputId=tab==='book'?'projInputBook':'projInputWorkout';
+  const el=document.getElementById(inputId);
+  const name=el.value.trim();
+  if(!name)return;
+  showToast('추가 중...');
+  const r=await req('POST','projects',{name,tab});
+  if(r.id){projectsData[tab].push({id:r.id,name,entries:[]});openProjs.add(r.id);el.value='';render(tab);showToast('추가됨');}
   else showToast('추가 실패: '+(r.error||'오류'));
 }
 
 async function delProj(id){
-  if(!confirm('프로젝트를 삭제할까요?'))return;
+  if(!confirm('삭제할까요?'))return;
   await req('DELETE','projects',{name:id});
-  projects=projects.filter(p=>p.id!==id);openProjs.delete(id);render();showToast('삭제됨');
+  projectsData[currentTab]=projectsData[currentTab].filter(p=>p.id!==id);openProjs.delete(id);render(currentTab);showToast('삭제됨');
 }
 
 async function addEntry(pid){
@@ -577,13 +624,13 @@ async function addEntry(pid){
   const dtl=document.getElementById('dtl_'+pid).value.trim();
   const dt=document.getElementById('date_'+pid).value;
   if(!ttl)return;
-  const r=await req('POST','entries',{projectId:pid,title:ttl,detail:dtl,date:dt});
-  if(r.id){projects.find(p=>p.id===pid).entries.push({id:r.id,date:dt,title:ttl,detail:dtl});document.getElementById('ttl_'+pid).value='';document.getElementById('dtl_'+pid).value='';render();showToast('추가됨');}
+  const r=await req('POST','entries',{projectId:pid,title:ttl,detail:dtl,date:dt,tab:currentTab});
+  if(r.id){projectsData[currentTab].find(p=>p.id===pid).entries.push({id:r.id,date:dt,title:ttl,detail:dtl});document.getElementById('ttl_'+pid).value='';document.getElementById('dtl_'+pid).value='';render(currentTab);showToast('추가됨');}
 }
 
 async function delEntry(pid,eid){
   await req('DELETE','entries/'+eid);
-  const p=projects.find(p=>p.id===pid);p.entries=p.entries.filter(e=>e.id!==eid);openEntries.delete(eid);render();showToast('삭제됨');
+  const p=projectsData[currentTab].find(p=>p.id===pid);p.entries=p.entries.filter(e=>e.id!==eid);openEntries.delete(eid);render(currentTab);showToast('삭제됨');
 }
 
 load();
