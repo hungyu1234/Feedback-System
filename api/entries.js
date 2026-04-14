@@ -11,17 +11,18 @@ module.exports = async (req, res) => {
   const id = req.query.id;
 
   if (req.method === 'POST') {
-    const { projectId, title, detail, date} = req.body;
-    const page = await notion.pages.create({
-      parent: { database_id: DB_ID },
-      properties: {
-        '제목': { title: [{ text: { content: title } }] },
-        '날짜': { date: { start: date } },
-        '내용': { rich_text: [{ text: { content: (detail||'').slice(0,2000) } }] },
-        '프로젝트': { select: { name: projectId } },
-       
-      },
-    });
+   
+const { projectId, title, detail, date, tab = 'memo' } = req.body;
+const page = await notion.pages.create({
+  parent: { database_id: DB_ID },
+  properties: {
+    '제목': { title: [{ text: { content: title } }] },
+    '날짜': { date: { start: date } },
+    '내용': { rich_text: [{ text: { content: (detail||'').slice(0,2000) } }] },
+    '프로젝트': { select: { name: projectId } },
+    '탭': { select: { name: tab } },
+  },
+});
     return res.json({ id: page.id });
   }
 
