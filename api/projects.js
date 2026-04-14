@@ -14,9 +14,7 @@ const queryOptions = {
   database_id: DB_ID,
   sorts: [{ property: '날짜', direction: 'descending' }],
 };
-if (tab !== 'memo') {
-  queryOptions.filter = { property: '탭', select: { equals: tab } };
-}
+queryOptions.filter = { property: '탭', select: { equals: tab } };
 const response = await notion.databases.query(queryOptions);
 
     const projectMap = {};
