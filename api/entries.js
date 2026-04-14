@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
         '날짜': { date: { start: date } },
         '내용': { rich_text: [{ text: { content: (detail||'').slice(0,2000) } }] },
         '프로젝트': { select: { name: projectId } },
-        '탭': { select: { name: tab } },
+       
       },
     });
     return res.json({ id: page.id });
