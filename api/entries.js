@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   const id = req.query.id;
 
   if (req.method === 'POST') {
-    const { projectId, title, detail, date, tab = 'memo' } = req.body;
+    const { projectId, title, detail, date} = req.body;
     const page = await notion.pages.create({
       parent: { database_id: DB_ID },
       properties: {
