@@ -514,7 +514,24 @@ function insertTable(){
 }
 
 let ctxCell=null;
+async function uploadImg(input, eid){
+  const file=input.files[0];
+  if(!file)return;
+  showToast('이미지 업로드 중...');
+  const reader=new FileReader();
+  reader.onload=async e=>{
+    const r=await req('POST','upload',{image:e.target.result});
+    if(r.url){
+      document.execCommand('insertHTML',false,`<img src="${r.url}" style="max-width:100%;margin:4px 0;display:block">`);
+      enableSave(eid);
+      showToast('업로드 완료');
+    }else showToast('업로드 실패');
+  };
+  reader.readAsDataURL(file);
+}
 
+let ctxCell=null;
+  
 document.addEventListener('contextmenu',function(e){
   const menu=document.getElementById('tblCtx');
   const cell=e.target.closest('td,th');
