@@ -622,8 +622,10 @@ document.addEventListener('paste',function(e){
     <thead><tr>${header.map(h=>`<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">${h}</th>`).join('')}</tr></thead>
     <tbody>${body.map(r=>`<tr>${r.map(c=>`<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true">${c}</td>`).join('')}</tr>`).join('')}</tbody>
   </table><br>`;
-  document.execCommand('insertHTML',false,html);
+document.execCommand('insertHTML',false,html);
 });
+
+document.addEventListener('click',function(e){
   if(!e.target.closest('.color-trigger')&&!e.target.closest('.color-palette')){
     document.querySelectorAll('.color-palette.show').forEach(el=>el.classList.remove('show'));
   }
