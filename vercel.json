@@ -1,7 +1,8 @@
 {
-  "rewrites": [
-    { "source": "/api/projects/:id", "destination": "/api/projects?id=:id" },
-    { "source": "/api/entries/:id", "destination": "/api/entries?id=:id" },
-    { "source": "/api/about", "destination": "/api/about" }
-  ]
+  "name": "feedback-app",
+  "version": "1.0.0",
+  "dependencies": {
+    "@notionhq/client": "^2.2.15",
+    "cloudinary": "^1.41.0"
+  }
 }
