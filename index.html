@@ -112,6 +112,15 @@ nav a:hover{color:#f0e8d8}
 .pc{width:18px;height:18px;border-radius:2px;cursor:pointer;border:1px solid rgba(0,0,0,0.08)}
 .pc:hover{transform:scale(1.2)}
 .entry-content{margin-left:88px;min-height:20px;outline:none;color:#4a3f35;font-size:12px;line-height:1.7;word-break:break-word}
+.entry-content table{border-collapse:collapse;font-size:12px;margin:6px 0;width:100%}
+.entry-content td,.entry-content th{border:1px solid #d4cdc0;padding:5px 10px;text-align:left;min-width:60px}
+.entry-content th{background:#ede8de;font-weight:500}
+.entry-content td:focus,.entry-content th:focus{outline:2px solid #a89e8e;outline-offset:-2px}
+.tbl-ctx{position:fixed;background:#fff;border:1px solid #d4cdc0;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:9999;padding:4px 0;min-width:140px;display:none}
+.tbl-ctx.show{display:block}
+.tbl-ctx-item{padding:7px 14px;font-size:12px;color:#2a2318;cursor:pointer}
+.tbl-ctx-item:hover{background:#f5f0e8}
+.tbl-ctx-sep{height:1px;background:#d4cdc0;margin:3px 0}
 .save-btn{display:block;margin-left:88px;margin-top:10px;height:26px;padding:0 14px;background:#2a2318;border:none;border-radius:4px;color:#e8e0d0;font-size:11px;cursor:pointer;opacity:0.3}
 .save-btn:disabled{opacity:0.3;cursor:not-allowed}
 .entry-add{padding:12px 18px 14px;background:#f5f0e8;border-top:1px solid #d4cdc0}
@@ -470,29 +479,154 @@ function enableSave(eid){const btn=document.getElementById('savebtn_'+eid);if(bt
 function resetSize(){document.execCommand('removeFormat',false,null);}
 function insertHr(){document.execCommand('insertHTML',false,'<hr style="border:none;border-top:1px solid #d4cdc0;margin:8px 0;">');}
 
-document.addEventListener('paste', function(e) {
-  const target = e.target.closest('.entry-content, .intro-text');
-  if (!target) return;
-  const text = e.clipboardData.getData('text/plain');
-  if (!text.includes('|')) return;
-  const lines = text.trim().split('\n').filter(l => l.trim() && !l.match(/^\|[-| ]+\|$/));
-  if (lines.length < 2) return;
+function insertTable(){
+  const html=`<table style="border-collapse:collapse;width:100%;margin:6px 0">
+    <thead><tr>
+      <th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목1</th>
+      <th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목2</th>
+      <th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목3</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+      </tr>
+      <tr>
+        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+      </tr>
+    </tbody>
+  </table><br>`;
+  document.execCommand('insertHTML',false,html);
+}
+
+// 우클릭 컨텍스트 메뉴
+const ctxMenu=document.createElement('div');
+ctxMenu.className='tbl-ctx';
+ctxMenu.id='tblCtx';
+ctxMenu.innerHTML=`
+  <div class="tbl-ctx-item" onclick="tblAddRowBelow()">아래에 행 추가</div>
+  <div class="tbl-ctx-item" onclick="tblAddRowAbove()">위에 행 추가</div>
+  <div class="tbl-ctx-sep"></div>
+  <div class="tbl-ctx-item" onclick="tblAddColRight()">오른쪽에 열 추가</div>
+  <div class="tbl-ctx-item" onclick="tblAddColLeft()">왼쪽에 열 추가</div>
+  <div class="tbl-ctx-sep"></div>
+  <div class="tbl-ctx-item" onclick="tblDelRow()" style="color:#c07060">행 삭제</div>
+  <div class="tbl-ctx-item" onclick="tblDelCol()" style="color:#c07060">열 삭제</div>
+`;
+document.body.appendChild(ctxMenu);
+
+let ctxCell=null;
+
+document.addEventListener('contextmenu',function(e){
+  const cell=e.target.closest('td,th');
+  if(!cell||!cell.closest('.entry-content')){ctxMenu.classList.remove('show');return;}
   e.preventDefault();
-  const rows = lines.map(l =>
-    l.split('|').filter((_, i, a) => i > 0 && i < a.length - 1).map(c => c.trim())
-  );
-  const header = rows[0];
-  const body = rows.slice(1);
-  const html = `<table style="border-collapse:collapse;font-size:12px;margin:8px 0;width:100%">
-    <thead><tr>${header.map(h => `<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;text-align:left;font-weight:500">${h}</th>`).join('')}</tr></thead>
-    <tbody>${body.map(r => `<tr>${r.map(c => `<td style="border:1px solid #d4cdc0;padding:5px 10px">${c}</td>`).join('')}</tr>`).join('')}</tbody>
-  </table>`;
-  document.execCommand('insertHTML', false, html);
+  ctxCell=cell;
+  ctxMenu.style.left=e.clientX+'px';
+  ctxMenu.style.top=e.clientY+'px';
+  ctxMenu.classList.add('show');
 });
 
-
-  
 document.addEventListener('click',function(e){
+  if(!e.target.closest('#tblCtx'))ctxMenu.classList.remove('show');
+});
+
+function tblAddRowBelow(){
+  if(!ctxCell)return;
+  const tr=ctxCell.closest('tr');
+  const cols=tr.cells.length;
+  const newTr=document.createElement('tr');
+  for(let i=0;i<cols;i++){
+    const td=document.createElement('td');
+    td.style.cssText='border:1px solid #d4cdc0;padding:5px 10px';
+    td.contentEditable='true';
+    newTr.appendChild(td);
+  }
+  tr.parentNode.insertBefore(newTr,tr.nextSibling);
+  ctxMenu.classList.remove('show');
+}
+
+function tblAddRowAbove(){
+  if(!ctxCell)return;
+  const tr=ctxCell.closest('tr');
+  const cols=tr.cells.length;
+  const newTr=document.createElement('tr');
+  for(let i=0;i<cols;i++){
+    const td=document.createElement('td');
+    td.style.cssText='border:1px solid #d4cdc0;padding:5px 10px';
+    td.contentEditable='true';
+    newTr.appendChild(td);
+  }
+  tr.parentNode.insertBefore(newTr,tr);
+  ctxMenu.classList.remove('show');
+}
+
+function tblAddColRight(){
+  if(!ctxCell)return;
+  const table=ctxCell.closest('table');
+  const ci=ctxCell.cellIndex;
+  table.querySelectorAll('tr').forEach((tr,ri)=>{
+    const cell=ri===0?document.createElement('th'):document.createElement('td');
+    cell.style.cssText=ri===0?'border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500':'border:1px solid #d4cdc0;padding:5px 10px';
+    cell.contentEditable='true';
+    const ref=tr.cells[ci+1]||null;
+    tr.insertBefore(cell,ref);
+  });
+  ctxMenu.classList.remove('show');
+}
+
+function tblAddColLeft(){
+  if(!ctxCell)return;
+  const table=ctxCell.closest('table');
+  const ci=ctxCell.cellIndex;
+  table.querySelectorAll('tr').forEach((tr,ri)=>{
+    const cell=ri===0?document.createElement('th'):document.createElement('td');
+    cell.style.cssText=ri===0?'border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500':'border:1px solid #d4cdc0;padding:5px 10px';
+    cell.contentEditable='true';
+    tr.insertBefore(cell,tr.cells[ci]);
+  });
+  ctxMenu.classList.remove('show');
+}
+
+function tblDelRow(){
+  if(!ctxCell)return;
+  const tr=ctxCell.closest('tr');
+  const tbody=tr.parentNode;
+  if(tbody.rows.length>1)tr.remove();
+  ctxMenu.classList.remove('show');
+}
+
+function tblDelCol(){
+  if(!ctxCell)return;
+  const table=ctxCell.closest('table');
+  const ci=ctxCell.cellIndex;
+  const totalCols=ctxCell.closest('tr').cells.length;
+  if(totalCols<=1)return;
+  table.querySelectorAll('tr').forEach(tr=>{if(tr.cells[ci])tr.cells[ci].remove();});
+  ctxMenu.classList.remove('show');
+}
+
+// 마크다운 표 붙여넣기 자동 변환
+document.addEventListener('paste',function(e){
+  const target=e.target.closest('.entry-content,.intro-text');
+  if(!target)return;
+  const text=e.clipboardData.getData('text/plain');
+  if(!text.includes('|'))return;
+  const lines=text.trim().split('\n').filter(l=>l.trim()&&!l.match(/^\|[-| ]+\|$/));
+  if(lines.length<2)return;
+  e.preventDefault();
+  const rows=lines.map(l=>l.split('|').filter((_,i,a)=>i>0&&i<a.length-1).map(c=>c.trim()));
+  const header=rows[0];
+  const body=rows.slice(1);
+  const html=`<table style="border-collapse:collapse;width:100%;margin:6px 0">
+    <thead><tr>${header.map(h=>`<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">${h}</th>`).join('')}</tr></thead>
+    <tbody>${body.map(r=>`<tr>${r.map(c=>`<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true">${c}</td>`).join('')}</tr>`).join('')}</tbody>
+  </table><br>`;
+  document.execCommand('insertHTML',false,html);
+});
   if(!e.target.closest('.color-trigger')&&!e.target.closest('.color-palette')){
     document.querySelectorAll('.color-palette.show').forEach(el=>el.classList.remove('show'));
   }
@@ -572,6 +706,8 @@ function render(tab='memo'){
                 <button onmousedown="event.preventDefault();fmtSize(6)" style="font-size:16px">L</button>
                 <div class="sep"></div>
                 <button onmousedown="event.preventDefault();insertHr()">—</button>
+                <div class="sep"></div>
+                <button onmousedown="event.preventDefault();insertTable()">표</button>
                 <div class="sep"></div>
                 <div class="color-trigger" onclick="togglePalette('${escAttr(e.id)}')">A</div>
                 ${paletteHTML(escAttr(e.id))}
