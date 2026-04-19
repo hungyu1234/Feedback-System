@@ -727,7 +727,9 @@ function render(tab='memo'){
           </div>
         </div>
       </div>
-    </div>`).join('');
+</div>
+    </div>
+  </div>`).join('');
 }
 
 function toggleProj(id){if(openProjs.has(id))openProjs.delete(id);else openProjs.add(id);render(currentTab);}
