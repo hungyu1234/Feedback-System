@@ -470,6 +470,28 @@ function enableSave(eid){const btn=document.getElementById('savebtn_'+eid);if(bt
 function resetSize(){document.execCommand('removeFormat',false,null);}
 function insertHr(){document.execCommand('insertHTML',false,'<hr style="border:none;border-top:1px solid #d4cdc0;margin:8px 0;">');}
 
+document.addEventListener('paste', function(e) {
+  const target = e.target.closest('.entry-content, .intro-text');
+  if (!target) return;
+  const text = e.clipboardData.getData('text/plain');
+  if (!text.includes('|')) return;
+  const lines = text.trim().split('\n').filter(l => l.trim() && !l.match(/^\|[-| ]+\|$/));
+  if (lines.length < 2) return;
+  e.preventDefault();
+  const rows = lines.map(l =>
+    l.split('|').filter((_, i, a) => i > 0 && i < a.length - 1).map(c => c.trim())
+  );
+  const header = rows[0];
+  const body = rows.slice(1);
+  const html = `<table style="border-collapse:collapse;font-size:12px;margin:8px 0;width:100%">
+    <thead><tr>${header.map(h => `<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;text-align:left;font-weight:500">${h}</th>`).join('')}</tr></thead>
+    <tbody>${body.map(r => `<tr>${r.map(c => `<td style="border:1px solid #d4cdc0;padding:5px 10px">${c}</td>`).join('')}</tr>`).join('')}</tbody>
+  </table>`;
+  document.execCommand('insertHTML', false, html);
+});
+
+
+  
 document.addEventListener('click',function(e){
   if(!e.target.closest('.color-trigger')&&!e.target.closest('.color-palette')){
     document.querySelectorAll('.color-palette.show').forEach(el=>el.classList.remove('show'));
