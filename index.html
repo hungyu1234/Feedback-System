@@ -543,7 +543,7 @@ function tblAddRowBelow(){
     newTr.appendChild(td);
   }
   tr.parentNode.insertBefore(newTr,tr.nextSibling);
-  ctxMenu.classList.remove('show');
+  document.getElementById('tblCtx').classList.remove('show');
 }
 
 function tblAddRowAbove(){
@@ -558,7 +558,7 @@ function tblAddRowAbove(){
     newTr.appendChild(td);
   }
   tr.parentNode.insertBefore(newTr,tr);
-  ctxMenu.classList.remove('show');
+  document.getElementById('tblCtx').classList.remove('show');
 }
 
 function tblAddColRight(){
@@ -572,7 +572,7 @@ function tblAddColRight(){
     const ref=tr.cells[ci+1]||null;
     tr.insertBefore(cell,ref);
   });
-  ctxMenu.classList.remove('show');
+  document.getElementById('tblCtx').classList.remove('show');
 }
 
 function tblAddColLeft(){
@@ -585,7 +585,7 @@ function tblAddColLeft(){
     cell.contentEditable='true';
     tr.insertBefore(cell,tr.cells[ci]);
   });
-  ctxMenu.classList.remove('show');
+  document.getElementById('tblCtx').classList.remove('show');
 }
 
 function tblDelRow(){
@@ -593,7 +593,7 @@ function tblDelRow(){
   const tr=ctxCell.closest('tr');
   const tbody=tr.parentNode;
   if(tbody.rows.length>1)tr.remove();
-  ctxMenu.classList.remove('show');
+  document.getElementById('tblCtx').classList.remove('show');
 }
 
 function tblDelCol(){
@@ -603,7 +603,7 @@ function tblDelCol(){
   const totalCols=ctxCell.closest('tr').cells.length;
   if(totalCols<=1)return;
   table.querySelectorAll('tr').forEach(tr=>{if(tr.cells[ci])tr.cells[ci].remove();});
-  ctxMenu.classList.remove('show');
+  document.getElementById('tblCtx').classList.remove('show');
 }
 
 // 마크다운 표 붙여넣기 자동 변환
