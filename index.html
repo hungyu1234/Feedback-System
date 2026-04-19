@@ -714,10 +714,7 @@ function render(tab='memo'){
               <div class="entry-content" contenteditable="${isAdmin}" id="econtent_${escAttr(e.id)}" oninput="enableSave('${escAttr(e.id)}')">${e.detail||''}</div>
               ${isAdmin?`<button class="save-btn" id="savebtn_${escAttr(e.id)}" onclick="saveEntry('${escAttr(e.id)}')" disabled>저장</button>`:''}
             </div>
-         </div>`).join('')}
-        </div>
-      </div>
-    </div>`
+          </div>`).join('')}
         <div class="entry-add" style="display:${isAdmin?'block':'none'}">
           <input type="date" class="entry-add-date" id="date_${escAttr(p.id)}" value="${today()}">
           <div class="entry-add-row">
@@ -727,11 +724,18 @@ function render(tab='memo'){
           </div>
         </div>
       </div>
-</div>
-    </div>
-  </div>`).join('');
+    </div>`).join('');
 }
 
+
+
+
+
+
+
+
+
+  
 function toggleProj(id){if(openProjs.has(id))openProjs.delete(id);else openProjs.add(id);render(currentTab);}
 function toggleEntry(id){if(openEntries.has(id))openEntries.delete(id);else openEntries.add(id);render(currentTab);}
 
