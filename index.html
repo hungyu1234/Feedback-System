@@ -708,6 +708,10 @@ function render(tab='memo'){
                 <div class="sep"></div>
                 <button onmousedown="event.preventDefault();insertTable()">표</button>
                 <div class="sep"></div>
+                <label style="height:24px;padding:0 8px;background:#fff;border:1px solid #d4cdc0;border-radius:3px;color:#6a5e50;font-size:11px;cursor:pointer;display:flex;align-items:center" onmousedown="event.preventDefault()">
+                  🖼<input type="file" accept="image/*" style="display:none" onchange="uploadImg(this,'${escAttr(e.id)}')">
+                </label>
+                <div class="sep"></div>
                 <div class="color-trigger" onclick="togglePalette('${escAttr(e.id)}')">A</div>
                 ${paletteHTML(escAttr(e.id))}
               </div>
