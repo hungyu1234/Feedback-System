@@ -714,7 +714,10 @@ function render(tab='memo'){
               <div class="entry-content" contenteditable="${isAdmin}" id="econtent_${escAttr(e.id)}" oninput="enableSave('${escAttr(e.id)}')">${e.detail||''}</div>
               ${isAdmin?`<button class="save-btn" id="savebtn_${escAttr(e.id)}" onclick="saveEntry('${escAttr(e.id)}')" disabled>저장</button>`:''}
             </div>
-          </div>`).join('')}
+         </div>`).join('')}
+        </div>
+      </div>
+    </div>`
         <div class="entry-add" style="display:${isAdmin?'block':'none'}">
           <input type="date" class="entry-add-date" id="date_${escAttr(p.id)}" value="${today()}">
           <div class="entry-add-row">
