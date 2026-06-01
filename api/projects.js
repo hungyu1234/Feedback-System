@@ -10,16 +10,42 @@ module.exports = async (req, res) => {
 
   if (req.method === 'GET') {
     const tab = req.query.tab || 'memo';
+    
 const queryOptions = {
   database_id: DB_ID,
-  sorts: [{ property: '날짜', direction: 'descending' }],
+  page_size: 100,
 };
-queryOptions.filter = { property: '탭', select: { equals: tab } };
-const response = await notion.databases.query(queryOptions);
+
+if (tab === 'memo') {
+  queryOptions.filter = {
+    or: [
+      { property: '탭', select: { equals: 'memo' } },
+      { property: '탭', select: { is_empty: true } }
+    ]
+  };
+} else {
+  queryOptions.filter = { property: '탭', select: { equals: tab } };
+}
+
+let response = await notion.databases.query(queryOptions);
+let allResults = [...response.results];
+while (response.has_more) {
+  response = await notion.databases.query({
+    ...queryOptions,
+    start_cursor: response.next_cursor
+  });
+  allResults = [...allResults, ...response.results];
+}
 
     const projectMap = {};
 
-    for (const page of response.results) {
+    allResults.sort((a, b) => {
+      const da = a.properties['날짜']?.date?.start || '';
+      const db2 = b.properties['날짜']?.date?.start || '';
+      return db2.localeCompare(da);
+    });
+
+    for (const page of allResults) {
       const proj = page.properties['프로젝트']?.select?.name || '기타';
       const title = page.properties['제목']?.title?.[0]?.plain_text || '';
       const date = page.properties['날짜']?.date?.start || '';
