@@ -8,7 +8,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#f5f0e8;color:#2a2318;font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding-top:52px}
-
 nav{background:#2a2318;padding:0 40px;display:flex;align-items:center;height:52px;gap:32px;position:fixed;top:0;left:0;right:0;z-index:1000}
 nav a{font-size:13px;color:#a89e8e;text-decoration:none;cursor:pointer;letter-spacing:0.3px;padding:4px 0;border-bottom:2px solid transparent}
 nav a.active{color:#f0e8d8;border-bottom:2px solid #f0e8d8}
@@ -16,56 +15,17 @@ nav a:hover{color:#f0e8d8}
 .nav-spacer{flex:1}
 .nav-editor{font-size:11px;color:#5a5048;cursor:pointer;padding:4px 8px}
 .nav-editor:hover{color:#a89e8e}
-
 .page{display:none}
 .page.active{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .page.active{animation:fadeUp 0.5s ease forwards}
 
-/* Photo band */
-.photo-band{width:100%;height:320px;background:#2a2318;position:relative;overflow:hidden;display:flex;align-items:center;cursor:pointer}
-.photo-band img{position:absolute;right:0;top:0;height:100%;width:45%;object-fit:cover;object-position:center 30%}
-.photo-band .photo-hint{position:absolute;right:0;top:0;height:100%;width:45%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#4a3f35;background:#3a3028}
-.photo-text{padding:0 48px;position:relative;z-index:1}
-.photo-name{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#f0e8d8;letter-spacing:-0.5px;margin-bottom:6px}
-.photo-sub{font-size:12px;color:#6a5e50;margin-bottom:16px;letter-spacing:0.3px}
-.photo-contact{font-size:11px;color:#6a5e50;line-height:2.2}
-.photo-contact b{color:#a89e8e;font-weight:400;margin-right:8px}
-.photo-upload-input{display:none}
-
-/* Body */
-.about-body{display:flex;min-height:500px;max-width:900px;margin:0 auto;width:100%}
-.left-nav{width:150px;flex-shrink:0;padding:24px 0;border-right:1px solid #d4cdc0;background:#faf7f2}
-.left-nav a{display:block;font-size:12px;color:#6a5e50;padding:9px 20px;cursor:pointer;border-left:2px solid transparent;transition:all .15s}
-.left-nav a.active{color:#1e1a15;border-left:2px solid #2a2318;font-weight:500;background:#ede8de}
-.left-nav a:hover{color:#1e1a15;background:#ede8de}
-
-.main-col{flex:1;padding:36px 60px}
-.intro-text{font-size:13px;color:#2a2318;line-height:1.95;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid #d4cdc0;outline:none;min-height:20px}
-.section{margin-bottom:28px}
-.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.sec-title{font-size:15px;font-weight:500;color:#1e1a15;font-family:'Playfair Display',serif}
-.sec-add{font-size:11px;color:#8a7e6e;cursor:pointer;padding:2px 8px;background:#ede8de;border-radius:3px;display:none}
-.career-row{display:flex;gap:24px;padding:7px 0;border-bottom:1px solid #ede8de;align-items:center}
-.career-row:last-child{border-bottom:none}
-.career-year{font-size:12px;color:#6a5e50;min-width:100px;flex-shrink:0;outline:none}
-.career-desc{font-size:12px;color:#2a2318;flex:1;outline:none}
-.career-del{width:18px;height:18px;background:#ede8de;border:none;border-radius:3px;cursor:pointer;font-size:10px;color:#8a7e6e;display:none;flex-shrink:0}
-.career-del:hover{background:#d4cdc0;color:#c07060}
-
-.right-col{width:220px;flex-shrink:0;padding:28px 24px;border-left:1px solid #d4cdc0}
-.right-label{font-size:11px;font-weight:500;color:#1e1a15;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #d4cdc0}
-.right-tags{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-.right-tag{font-size:12px;color:#4a3f35;padding:2px 0;display:flex;align-items:center;gap:4px}
-.right-tag::before{content:'· ';color:#8a7e6e}
-.right-tag-del{font-size:10px;color:#c0b0a0;cursor:pointer;display:none;margin-left:auto}
-.right-tag-del:hover{color:#c07060}
-.tag-input{display:none;width:100%;height:26px;background:#fff;border:1px solid #d4cdc0;border-radius:4px;font-size:11px;padding:0 8px;color:#2a2318;outline:none;margin-top:4px}
-
-.save-bar{display:none;padding:14px 48px;background:#faf7f2;border-top:1px solid #d4cdc0;justify-content:flex-end;gap:8px}
-.save-bar.show{display:flex}
-.btn-save{height:30px;padding:0 20px;background:#2a2318;border:none;border-radius:5px;color:#e8e0d0;font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
-.btn-cancel{height:30px;padding:0 16px;background:#ede8de;border:1px solid #d4cdc0;border-radius:5px;color:#4a3f35;font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+/* Home */
+.home-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 52px);gap:16px;padding:40px}
+.home-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:#1e1a15;margin-bottom:32px;letter-spacing:-0.3px}
+.home-cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.home-card{width:200px;height:120px;background:#fff;border:1px solid #d4cdc0;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:#1e1a15;transition:transform .15s,box-shadow .15s}
+.home-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.08);border-color:#a89e8e}
 
 /* Memo */
 .memo-wrap{padding:48px 40px;max-width:760px;margin:0 auto}
@@ -75,8 +35,9 @@ nav a:hover{color:#f0e8d8}
 .add-proj input::placeholder{color:#a89e8e}
 .add-proj button{height:38px;padding:0 18px;background:#2a2318;border:none;border-radius:6px;color:#e8e0d0;font-size:13px;cursor:pointer}
 .add-proj button:hover{background:#3a3028}
-.projects{display:flex;flex-direction:column;gap:12px}  
-.proj-card{background:#fff;border:1px solid #d4cdc0;border-radius:8px;overflow:visible;transition:transform 0.2s ease,box-shadow 0.2s ease}
+.projects{display:flex;flex-direction:column;gap:10px}
+.proj-card{background:#fff;border:1px solid #d4cdc0;border-radius:8px;overflow:hidden;transition:transform 0.2s ease,box-shadow 0.2s ease}
+.proj-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.06)}
 .proj-header{display:flex;align-items:center;gap:10px;padding:13px 18px;cursor:pointer;user-select:none}
 .proj-header:hover{background:#f5f0e8}
 .proj-arrow{font-size:9px;color:#8a7e6e;transition:transform .15s}
@@ -85,7 +46,7 @@ nav a:hover{color:#f0e8d8}
 .proj-count{font-size:11px;color:#a89e8e}
 .proj-del{font-size:11px;color:#a89e8e;cursor:pointer;padding:2px 4px}
 .proj-del:hover{color:#c07060}
-.proj-body{display:none;border-top:1px solid #d4cdc0;border-radius:0 0 8px 8px}
+.proj-body{display:none;border-top:1px solid #d4cdc0}
 .proj-body.open{display:block}
 .entry{border-bottom:1px solid #ede8de}
 .entry:last-child{border-bottom:none}
@@ -136,90 +97,24 @@ nav a:hover{color:#f0e8d8}
 </style>
 </head>
 <body>
-
 <nav>
-  <a onclick="showPage('about')" id="nav-about" class="active">About Me</a>
+  <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
   <a onclick="showPage('memo')" id="nav-memo">Project Memo</a>
   <a onclick="showPage('book')" id="nav-book">Book</a>
   <a onclick="showPage('workout')" id="nav-workout">Workout</a>
-
-  
   <div class="nav-spacer"></div>
   <span class="nav-editor" onclick="checkAdmin()">Editor</span>
 </nav>
 
-<!-- About Me -->
-<div class="page active" id="page-about">
-  <div class="photo-band" id="photoBand" onclick="if(isAdmin)document.getElementById('photoInput').click()">
-    <div class="photo-text">
-      <div class="photo-name">H.G. Lee</div>
-      <div class="photo-sub" id="photoSub">KICPA · M&A Advisor</div>
-<div class="photo-contact">
-  <div><b>T.</b><input id="contactT" value="-" style="background:transparent;border:none;outline:none;color:#6a5e50;font-size:11px;font-family:'Noto Sans KR',sans-serif;width:160px" ${isAdmin?'':'readonly'}></div>
-  <div><b>F.</b><input id="contactF" value="-" style="background:transparent;border:none;outline:none;color:#6a5e50;font-size:11px;font-family:'Noto Sans KR',sans-serif;width:160px" ${isAdmin?'':'readonly'}></div>
-  <div><b>E.</b><input id="contactE" value="-" style="background:transparent;border:none;outline:none;color:#6a5e50;font-size:11px;font-family:'Noto Sans KR',sans-serif;width:160px" ${isAdmin?'':'readonly'}></div>
-</div>
+<!-- Home -->
+<div class="page active" id="page-home">
+  <div class="home-wrap">
+    <div class="home-title">H.G. Lee</div>
+    <div class="home-cards">
+      <div class="home-card" onclick="showPage('memo')">Project Memo</div>
+      <div class="home-card" onclick="showPage('book')">Book</div>
+      <div class="home-card" onclick="showPage('workout')">Workout</div>
     </div>
-    <img id="photoImg" src="" style="display:none">
-    <div class="photo-hint" id="photoHint">클릭하여 사진 업로드</div>
-  </div>
-  <input type="file" id="photoInput" class="photo-upload-input" accept="image/*" onchange="uploadPhoto(this)">
-
-  <div class="about-body">
-    <div class="left-nav">
-      <a class="active" onclick="scrollToSec('sec-intro')">소개</a>
-      <a onclick="scrollToSec('sec-career')">경력</a>
-      <a onclick="scrollToSec('sec-edu')">학력</a>
-      <a onclick="scrollToSec('sec-activity')">주요활동</a>
-      <a onclick="scrollToSec('sec-cert')">자격취득</a>
-    </div>
-
-    <div class="main-col">
-      <div id="sec-intro" class="intro-text" contenteditable="false" oninput="markChanged()"></div>
-
-      <div id="sec-career" class="section">
-        <div class="sec-head">
-          <span class="sec-title">경력</span>
-          <span class="sec-add" onclick="addRow('career-list')">+ 추가</span>
-        </div>
-        <div id="career-list"></div>
-      </div>
-
-      <div id="sec-edu" class="section">
-        <div class="sec-head">
-          <span class="sec-title">학력</span>
-          <span class="sec-add" onclick="addRow('edu-list')">+ 추가</span>
-        </div>
-        <div id="edu-list"></div>
-      </div>
-
-      <div id="sec-activity" class="section">
-        <div class="sec-head">
-          <span class="sec-title">주요활동</span>
-          <span class="sec-add" onclick="addRow('activity-list')">+ 추가</span>
-        </div>
-        <div id="activity-list"></div>
-      </div>
-
-      <div id="sec-cert" class="section">
-        <div class="sec-head">
-          <span class="sec-title">자격취득</span>
-          <span class="sec-add" onclick="addRow('cert-list')">+ 추가</span>
-        </div>
-        <div id="cert-list"></div>
-      </div>
-    </div>
-
-    <div class="right-col">
-      <div class="right-label">관련 분야</div>
-      <div class="right-tags" id="tagList"></div>
-      <input type="text" class="tag-input" id="tagInput" placeholder="태그 추가..." onkeydown="if(event.key==='Enter')addTag()">
-    </div>
-  </div>
-
-  <div class="save-bar" id="saveBar">
-    <button class="btn-cancel" onclick="loadAbout()">취소</button>
-    <button class="btn-save" onclick="saveAbout()">저장</button>
   </div>
 </div>
 
@@ -277,183 +172,6 @@ const ADMIN_PW='hglee1234';
 let isAdmin=false;
 if(sessionStorage.getItem('isAdmin')==='true') isAdmin=true;
 
-let tags=[];
-let aboutData={career:[],edu:[],activity:[],cert:[]};
-
-function showPage(name){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
-  const page=document.getElementById('page-'+name);
-  page.classList.add('active');
-  page.style.animation='none';
-  page.offsetHeight;
-  page.style.animation='';
-  document.getElementById('nav-'+name).classList.add('active');
-  if(name==='book'||name==='workout'){
-    currentTab=name;
-    projects=projectsData[name];
-    loadTab(name);
-    if(isAdmin){
-      const wrapId=name==='book'?'addProjWrapBook':'addProjWrapWorkout';
-      document.getElementById(wrapId).style.display='flex';
-    }
-  } else if(name==='memo'){
-    currentTab='memo';
-    projects=projectsData.memo;
-    render('memo');
-  }
-}
-
-function scrollToSec(id){
-  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
-  document.querySelectorAll('.left-nav a').forEach(a=>a.classList.remove('active'));
-  event.target.classList.add('active');
-}
-
-function checkAdmin(){
-  if(isAdmin){showToast('이미 편집 모드예요');return;}
-  const pw=prompt('비밀번호:');
-  if(pw===ADMIN_PW){
-    isAdmin=true;
-    sessionStorage.setItem('isAdmin','true');
-    applyAdminMode();
-    showToast('편집 모드 활성화');
-  }else{
-    showToast('비밀번호가 틀렸어요');
-  }
-}
-
-function applyAdminMode(){
-  document.getElementById('sec-intro').contentEditable='true';
-  ['contactT','contactF','contactE'].forEach(id=>{
-    document.getElementById(id).contentEditable='true';
-  });
-  document.querySelectorAll('.sec-add').forEach(el=>el.style.display='block');
-  document.querySelectorAll('.career-del').forEach(el=>el.style.display='block');
-  document.querySelectorAll('.right-tag-del').forEach(el=>el.style.display='inline');
-  document.getElementById('tagInput').style.display='block';
-  document.getElementById('saveBar').classList.add('show');
-  document.getElementById('addProjWrap').style.display='flex';
-  if(currentTab==='book')document.getElementById('addProjWrapBook').style.display='flex';
-  if(currentTab==='workout')document.getElementById('addProjWrapWorkout').style.display='flex';
-  document.getElementById('photoHint').textContent='클릭하여 사진 변경';
-}
-
-function markChanged(){}
-
-function renderRows(listId,items){
-  const el=document.getElementById(listId);
-  el.innerHTML=items.map((item,i)=>`
-    <div class="career-row">
-      <span class="career-year" contenteditable="${isAdmin}" oninput="updateItem('${listId}',${i},'year',this.innerText)">${item.year||''}</span>
-      <span class="career-desc" contenteditable="${isAdmin}" oninput="updateItem('${listId}',${i},'desc',this.innerText)">${item.desc||''}</span>
-      <button class="career-del" style="display:${isAdmin?'block':'none'}" onclick="delRow('${listId}',${i})">✕</button>
-    </div>`).join('');
-}
-
-function getListKey(listId){
-  return listId.replace('-list','');
-}
-
-function updateItem(listId,i,field,val){
-  const key=getListKey(listId);
-  aboutData[key][i][field]=val;
-}
-
-function addRow(listId){
-  const key=getListKey(listId);
-  aboutData[key].push({year:'',desc:''});
-  renderRows(listId,aboutData[key]);
-  applyAdminMode();
-}
-
-function delRow(listId,i){
-  const key=getListKey(listId);
-  aboutData[key].splice(i,1);
-  renderRows(listId,aboutData[key]);
-  applyAdminMode();
-}
-
-function renderTags(){
-  document.getElementById('tagList').innerHTML=tags.map((t,i)=>`
-    <div class="right-tag">${t}<span class="right-tag-del" style="display:${isAdmin?'inline':''}" onclick="removeTag(${i})">✕</span></div>
-  `).join('');
-}
-
-function addTag(){
-  const el=document.getElementById('tagInput');
-  const val=el.value.trim();
-  if(!val)return;
-  tags.push(val);el.value='';
-  renderTags();
-}
-
-function removeTag(i){
-  tags.splice(i,1);renderTags();
-}
-
-async function uploadPhoto(input){
-  const file=input.files[0];
-  if(!file)return;
-  showToast('사진 업로드 중...');
-  const reader=new FileReader();
-  reader.onload=async e=>{
-    const r=await req('POST','upload',{image:e.target.result});
-    if(r.url){
-      document.getElementById('photoImg').src=r.url;
-      document.getElementById('photoImg').style.display='block';
-      document.getElementById('photoHint').style.display='none';
-      showToast('사진 업로드 완료');
-    }else showToast('업로드 실패');
-  };
-  reader.readAsDataURL(file);
-}
-
-async function saveAbout(){
-  const data={
-    intro:document.getElementById('sec-intro').innerHTML,
-    contactT:document.getElementById('contactT').value,
-    contactF:document.getElementById('contactF').value,
-    contactE:document.getElementById('contactE').value,
-    career:JSON.stringify(aboutData.career),
-    edu:JSON.stringify(aboutData.edu),
-    activity:JSON.stringify(aboutData.activity),
-    cert:JSON.stringify(aboutData.cert),
-    tags:JSON.stringify(tags),
-    photo:document.getElementById('photoImg').src||'',
-  };
-  showToast('저장 중...');
-  await req('POST','about',data);
-  showToast('저장됨');
-}
-
-async function loadAbout(){
-  try{
-    const data=await req('GET','about');
-    if(data.intro)document.getElementById('sec-intro').innerHTML=data.intro;
-    if(data.contactT)document.getElementById('contactT').value=data.contactT;
-    if(data.contactF)document.getElementById('contactF').value=data.contactF;
-    if(data.contactE)document.getElementById('contactE').value=data.contactE;
-    if(data.career){try{aboutData.career=JSON.parse(data.career);}catch(e){aboutData.career=[];}}
-    if(data.edu){try{aboutData.edu=JSON.parse(data.edu);}catch(e){aboutData.edu=[];}}
-    if(data.activity){try{aboutData.activity=JSON.parse(data.activity);}catch(e){aboutData.activity=[];}}
-    if(data.cert){try{aboutData.cert=JSON.parse(data.cert);}catch(e){aboutData.cert=[];}}
-    if(data.tags){try{tags=JSON.parse(data.tags);}catch(e){tags=[];}}
-    renderRows('career-list',aboutData.career);
-    renderRows('edu-list',aboutData.edu);
-    renderRows('activity-list',aboutData.activity);
-    renderRows('cert-list',aboutData.cert);
-    renderTags();
-    if(data.photo&&data.photo!==''){
-      document.getElementById('photoImg').src=data.photo;
-      document.getElementById('photoImg').style.display='block';
-      document.getElementById('photoHint').style.display='none';
-    }
-  }catch(e){}
-  if(isAdmin)applyAdminMode();
-}
-
-const today=()=>new Date().toISOString().slice(0,10);
 let projectsData={memo:[],book:[],workout:[]};
 let projects=[];
 let currentTab='memo';
@@ -481,6 +199,49 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),1800);
 }
 
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+  const page=document.getElementById('page-'+name);
+  page.classList.add('active');
+  page.style.animation='none';
+  page.offsetHeight;
+  page.style.animation='';
+  document.getElementById('nav-'+name).classList.add('active');
+  if(name==='book'||name==='workout'){
+    currentTab=name;
+    projects=projectsData[name];
+    loadTab(name);
+    if(isAdmin){
+      const wrapId=name==='book'?'addProjWrapBook':'addProjWrapWorkout';
+      document.getElementById(wrapId).style.display='flex';
+    }
+  } else if(name==='memo'){
+    currentTab='memo';
+    projects=projectsData.memo;
+    render('memo');
+  }
+}
+
+function checkAdmin(){
+  if(isAdmin){showToast('이미 편집 모드예요');return;}
+  const pw=prompt('비밀번호:');
+  if(pw===ADMIN_PW){
+    isAdmin=true;
+    sessionStorage.setItem('isAdmin','true');
+    applyAdminMode();
+    showToast('편집 모드 활성화');
+  }else{
+    showToast('비밀번호가 틀렸어요');
+  }
+}
+
+function applyAdminMode(){
+  document.getElementById('addProjWrap').style.display='flex';
+  if(currentTab==='book')document.getElementById('addProjWrapBook').style.display='flex';
+  if(currentTab==='workout')document.getElementById('addProjWrapWorkout').style.display='flex';
+}
+
 function fmt(cmd){document.execCommand(cmd,false,null);}
 function fmtSize(size){document.execCommand('fontSize',false,size);}
 function fmtColor(color){document.execCommand('foreColor',false,color);}
@@ -488,48 +249,31 @@ function togglePalette(id){document.getElementById('pal_'+id).classList.toggle('
 function enableSave(eid){const btn=document.getElementById('savebtn_'+eid);if(btn){btn.disabled=false;btn.style.opacity='1';}}
 function resetSize(){document.execCommand('removeFormat',false,null);}
 function insertHr(){document.execCommand('insertHTML',false,'<hr style="border:none;border-top:1px solid #d4cdc0;margin:8px 0;">');}
-
 function insertTable(){
   const html=`<table style="border-collapse:collapse;width:100%;margin:6px 0">
-    <thead><tr>
-      <th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목1</th>
-      <th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목2</th>
-      <th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목3</th>
-    </tr></thead>
-    <tbody>
-      <tr>
-        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-      </tr>
-      <tr>
-        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-        <td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-      </tr>
-    </tbody>
-  </table><br>`;
+<thead><tr>
+<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목1</th>
+<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목2</th>
+<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목3</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+</tr>
+<tr>
+<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
+</tr>
+</tbody>
+</table><br>`;
   document.execCommand('insertHTML',false,html);
 }
 
 let ctxCell=null;
-async function uploadImg(input, eid){
-  const file=input.files[0];
-  if(!file)return;
-  showToast('이미지 업로드 중...');
-  const reader=new FileReader();
-  reader.onload=async e=>{
-    const r=await req('POST','upload',{image:e.target.result});
-    if(r.url){
-      document.execCommand('insertHTML',false,`<img src="${r.url}" style="max-width:100%;margin:4px 0;display:block">`);
-      enableSave(eid);
-      showToast('업로드 완료');
-    }else showToast('업로드 실패');
-  };
-  reader.readAsDataURL(file);
-}
 
-  
 document.addEventListener('contextmenu',function(e){
   const menu=document.getElementById('tblCtx');
   const cell=e.target.closest('td,th');
@@ -544,6 +288,9 @@ document.addEventListener('contextmenu',function(e){
 document.addEventListener('click',function(e){
   const menu=document.getElementById('tblCtx');
   if(menu&&!e.target.closest('#tblCtx'))menu.classList.remove('show');
+  if(!e.target.closest('.color-trigger')&&!e.target.closest('.color-palette')){
+    document.querySelectorAll('.color-palette.show').forEach(el=>el.classList.remove('show'));
+  }
 });
 
 function tblAddRowBelow(){
@@ -621,9 +368,8 @@ function tblDelCol(){
   document.getElementById('tblCtx').classList.remove('show');
 }
 
-// 마크다운 표 붙여넣기 자동 변환
 document.addEventListener('paste',function(e){
-  const target=e.target.closest('.entry-content,.intro-text');
+  const target=e.target.closest('.entry-content');
   if(!target)return;
   const text=e.clipboardData.getData('text/plain');
   if(!text.includes('|'))return;
@@ -634,16 +380,10 @@ document.addEventListener('paste',function(e){
   const header=rows[0];
   const body=rows.slice(1);
   const html=`<table style="border-collapse:collapse;width:100%;margin:6px 0">
-    <thead><tr>${header.map(h=>`<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">${h}</th>`).join('')}</tr></thead>
-    <tbody>${body.map(r=>`<tr>${r.map(c=>`<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true">${c}</td>`).join('')}</tr>`).join('')}</tbody>
-  </table><br>`;
-document.execCommand('insertHTML',false,html);
-});
-
-document.addEventListener('click',function(e){
-  if(!e.target.closest('.color-trigger')&&!e.target.closest('.color-palette')){
-    document.querySelectorAll('.color-palette.show').forEach(el=>el.classList.remove('show'));
-  }
+<thead><tr>${header.map(h=>`<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">${h}</th>`).join('')}</tr></thead>
+<tbody>${body.map(r=>`<tr>${r.map(c=>`<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true">${c}</td>`).join('')}</tr>`).join('')}</tbody>
+</table><br>`;
+  document.execCommand('insertHTML',false,html);
 });
 
 function escHTML(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -651,20 +391,19 @@ function escAttr(s){return String(s).replace(/'/g,'&#39;');}
 
 function paletteHTML(eid){
   return `<div class="color-palette" id="pal_${eid}">
-    ${palette.map(row=>`<div class="palette-row">${row.map(c=>`<div class="pc" style="background:${c}" onmousedown="event.preventDefault();fmtColor('${c}');togglePalette('${eid}')"></div>`).join('')}</div>`).join('')}
-  </div>`;
+${palette.map(row=>`<div class="palette-row">${row.map(c=>`<div class="pc" style="background:${c}" onmousedown="event.preventDefault();fmtColor('${c}');togglePalette('${eid}')"></div>`).join('')}</div>`).join('')}
+</div>`;
 }
+
+const today=()=>new Date().toISOString().slice(0,10);
 
 async function load(){
   try{
     const r=await req('GET','projects');
     projectsData.memo=r.projects||[];
     projects=projectsData.memo;
-    await loadAbout();
     render('memo');
-  }catch(e){
-    document.getElementById('projects').innerHTML='<div class="status">불러오기 실패. 새로고침 해보세요.</div>';
-  }
+  }catch(e){}
 }
 
 async function loadTab(tab){
@@ -689,72 +428,59 @@ function render(tab='memo'){
   const data=projectsData[tab]||[];
   if(!data.length){el.innerHTML='<div class="status">항목을 추가해보세요</div>';return;}
   el.innerHTML=data.map(p=>`
-    <div class="proj-card">
-      <div class="proj-header" onclick="toggleProj('${escAttr(p.id)}')">
-        <span class="proj-arrow ${openProjs.has(p.id)?'open':''}">&#9654;</span>
-        <span class="proj-name">${escHTML(p.name)}</span>
-        <span class="proj-count">${p.entries.length}개</span>
-        ${isAdmin?`<span class="proj-del" onclick="event.stopPropagation();renameProj('${escAttr(p.id)}','${escAttr(p.name)}')">수정</span>
-        <span class="proj-del" onclick="event.stopPropagation();delProj('${escAttr(p.id)}')">삭제</span>`:''}
+<div class="proj-card">
+  <div class="proj-header" onclick="toggleProj('${escAttr(p.id)}')">
+    <span class="proj-arrow ${openProjs.has(p.id)?'open':''}">&#9654;</span>
+    <span class="proj-name">${escHTML(p.name)}</span>
+    <span class="proj-count">${p.entries.length}개</span>
+    ${isAdmin?`<span class="proj-del" onclick="event.stopPropagation();renameProj('${escAttr(p.id)}','${escAttr(p.name)}')">수정</span>
+    <span class="proj-del" onclick="event.stopPropagation();delProj('${escAttr(p.id)}')">삭제</span>`:''}
+  </div>
+  <div class="proj-body ${openProjs.has(p.id)?'open':''}">
+    ${p.entries.length===0?'<div class="empty">피드백 없음</div>':p.entries.map(e=>`
+    <div class="entry">
+      <div class="entry-row" onclick="toggleEntry('${escAttr(e.id)}')">
+        <span class="entry-date">${escHTML(e.date)}</span>
+        <span class="entry-title">${escHTML(e.title)}</span>
+        ${isAdmin?`<span class="entry-del" onclick="event.stopPropagation();delEntry('${escAttr(p.id)}','${escAttr(e.id)}')">✕</span>`:''}
       </div>
-      <div class="proj-body ${openProjs.has(p.id)?'open':''}">
-        ${p.entries.length===0?'<div class="empty">피드백 없음</div>':p.entries.map(e=>`
-          <div class="entry">
-            <div class="entry-row" onclick="toggleEntry('${escAttr(e.id)}')">
-              <span class="entry-date">${escHTML(e.date)}</span>
-              <span class="entry-title">${escHTML(e.title)}</span>
-              ${isAdmin?`<span class="entry-del" onclick="event.stopPropagation();delEntry('${escAttr(p.id)}','${escAttr(e.id)}')">✕</span>`:''}
-            </div>
-            <div class="entry-detail ${openEntries.has(e.id)?'open':''}" id="ed_${escAttr(e.id)}">
-              ${isAdmin?`<div class="entry-edit-row">
-                <input type="date" id="edate_${escAttr(e.id)}" value="${escHTML(e.date)}" oninput="enableSave('${escAttr(e.id)}')">
-                <input type="text" id="etitle_${escAttr(e.id)}" value="${escHTML(e.title)}" placeholder="제목" oninput="enableSave('${escAttr(e.id)}')">
-              </div>`:`<div style="padding-left:88px;font-size:11px;color:#a89e8e;margin-bottom:8px">${escHTML(e.date)} · ${escHTML(e.title)}</div>`}
-              <div class="entry-toolbar" style="display:${isAdmin?'flex':'none'}">
-                <button onmousedown="event.preventDefault();fmt('bold')"><b>B</b></button>
-                <button onmousedown="event.preventDefault();fmt('italic')"><i>I</i></button>
-                <button onmousedown="event.preventDefault();fmt('underline')"><u>U</u></button>
-                <div class="sep"></div>
-                <button onmousedown="event.preventDefault();resetSize()" style="font-size:11px">S</button>
-                <button onmousedown="event.preventDefault();fmtSize(4)" style="font-size:13px">M</button>
-                <button onmousedown="event.preventDefault();fmtSize(6)" style="font-size:16px">L</button>
-                <div class="sep"></div>
-                <button onmousedown="event.preventDefault();insertHr()">—</button>
-                <div class="sep"></div>
-                <button onmousedown="event.preventDefault();insertTable()">표</button>
-                <div class="sep"></div>
-                <label style="height:24px;padding:0 8px;background:#fff;border:1px solid #d4cdc0;border-radius:3px;color:#6a5e50;font-size:11px;cursor:pointer;display:flex;align-items:center" onmousedown="event.preventDefault()">
-                  🖼<input type="file" accept="image/*" style="display:none" onchange="uploadImg(this,'${escAttr(e.id)}')">
-                </label>
-                <div class="sep"></div>
-                <div class="color-trigger" onclick="togglePalette('${escAttr(e.id)}')">A</div>
-                ${paletteHTML(escAttr(e.id))}
-              </div>
-              <div class="entry-content" contenteditable="${isAdmin}" id="econtent_${escAttr(e.id)}" oninput="enableSave('${escAttr(e.id)}')">${e.detail||''}</div>
-              ${isAdmin?`<button class="save-btn" id="savebtn_${escAttr(e.id)}" onclick="saveEntry('${escAttr(e.id)}')" disabled>저장</button>`:''}
-            </div>
-          </div>`).join('')}
-        <div class="entry-add" style="display:${isAdmin?'block':'none'}">
-          <input type="date" class="entry-add-date" id="date_${escAttr(p.id)}" value="${today()}">
-          <div class="entry-add-row">
-            <input type="text" id="ttl_${escAttr(p.id)}" placeholder="제목" onkeydown="if(event.key==='Enter')addEntry('${escAttr(p.id)}')">
-            <input type="text" id="dtl_${escAttr(p.id)}" placeholder="내용 (선택)" onkeydown="if(event.key==='Enter')addEntry('${escAttr(p.id)}')">
-            <button onclick="addEntry('${escAttr(p.id)}')">추가</button>
-          </div>
+      <div class="entry-detail ${openEntries.has(e.id)?'open':''}" id="ed_${escAttr(e.id)}">
+        ${isAdmin?`<div class="entry-edit-row">
+          <input type="date" id="edate_${escAttr(e.id)}" value="${escHTML(e.date)}" oninput="enableSave('${escAttr(e.id)}')">
+          <input type="text" id="etitle_${escAttr(e.id)}" value="${escHTML(e.title)}" placeholder="제목" oninput="enableSave('${escAttr(e.id)}')">
+        </div>`:`<div style="padding-left:88px;font-size:11px;color:#a89e8e;margin-bottom:8px">${escHTML(e.date)} · ${escHTML(e.title)}</div>`}
+        <div class="entry-toolbar" style="display:${isAdmin?'flex':'none'}">
+          <button onmousedown="event.preventDefault();fmt('bold')"><b>B</b></button>
+          <button onmousedown="event.preventDefault();fmt('italic')"><i>I</i></button>
+          <button onmousedown="event.preventDefault();fmt('underline')"><u>U</u></button>
+          <div class="sep"></div>
+          <button onmousedown="event.preventDefault();resetSize()" style="font-size:11px">S</button>
+          <button onmousedown="event.preventDefault();fmtSize(4)" style="font-size:13px">M</button>
+          <button onmousedown="event.preventDefault();fmtSize(6)" style="font-size:16px">L</button>
+          <div class="sep"></div>
+          <button onmousedown="event.preventDefault();insertHr()">—</button>
+          <div class="sep"></div>
+          <button onmousedown="event.preventDefault();insertTable()">표</button>
+          <div class="sep"></div>
+          <div class="color-trigger" onclick="togglePalette('${escAttr(e.id)}')">A</div>
+          ${paletteHTML(escAttr(e.id))}
         </div>
+        <div class="entry-content" contenteditable="${isAdmin}" id="econtent_${escAttr(e.id)}" oninput="enableSave('${escAttr(e.id)}')">${e.detail||''}</div>
+        ${isAdmin?`<button class="save-btn" id="savebtn_${escAttr(e.id)}" onclick="saveEntry('${escAttr(e.id)}')" disabled>저장</button>`:''}
       </div>
-    </div>`).join('');
+    </div>`).join('')}
+    <div class="entry-add" style="display:${isAdmin?'block':'none'}">
+      <input type="date" class="entry-add-date" id="date_${escAttr(p.id)}" value="${today()}">
+      <div class="entry-add-row">
+        <input type="text" id="ttl_${escAttr(p.id)}" placeholder="제목" onkeydown="if(event.key==='Enter')addEntry('${escAttr(p.id)}')">
+        <input type="text" id="dtl_${escAttr(p.id)}" placeholder="내용 (선택)" onkeydown="if(event.key==='Enter')addEntry('${escAttr(p.id)}')">
+        <button onclick="addEntry('${escAttr(p.id)}')">추가</button>
+      </div>
+    </div>
+  </div>
+</div>`).join('');
 }
 
-
-
-
-
-
-
-
-
-  
 function toggleProj(id){if(openProjs.has(id))openProjs.delete(id);else openProjs.add(id);render(currentTab);}
 function toggleEntry(id){if(openEntries.has(id))openEntries.delete(id);else openEntries.add(id);render(currentTab);}
 
