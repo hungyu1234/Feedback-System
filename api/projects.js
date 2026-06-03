@@ -10,34 +10,32 @@ module.exports = async (req, res) => {
 
   if (req.method === 'GET') {
     const tab = req.query.tab || 'memo';
-    
-const queryOptions = {
-  database_id: DB_ID,
-  page_size: 100,
-};
 
-if (tab === 'memo') {
-  queryOptions.filter = {
-    or: [
-      { property: '탭', select: { equals: 'memo' } },
-      { property: '탭', select: { is_empty: true } }
-    ]
-  };
-} else {
-  queryOptions.filter = { property: '탭', select: { equals: tab } };
-}
+    const queryOptions = {
+      database_id: DB_ID,
+      page_size: 100,
+    };
 
-let response = await notion.databases.query(queryOptions);
-let allResults = [...response.results];
-while (response.has_more) {
-  response = await notion.databases.query({
-    ...queryOptions,
-    start_cursor: response.next_cursor
-  });
-  allResults = [...allResults, ...response.results];
-}
+    if (tab === 'memo') {
+      queryOptions.filter = {
+        or: [
+          { property: '탭', select: { equals: 'memo' } },
+          { property: '탭', select: { is_empty: true } }
+        ]
+      };
+    } else {
+      queryOptions.filter = { property: '탭', select: { equals: tab } };
+    }
 
-    const projectMap = {};
+    let response = await notion.databases.query(queryOptions);
+    let allResults = [...response.results];
+    while (response.has_more) {
+      response = await notion.databases.query({
+        ...queryOptions,
+        start_cursor: response.next_cursor
+      });
+      allResults = [...allResults, ...response.results];
+    }
 
     allResults.sort((a, b) => {
       const da = a.properties['날짜']?.date?.start || '';
@@ -45,16 +43,20 @@ while (response.has_more) {
       return db2.localeCompare(da);
     });
 
+    const projectMap = {};
+
     for (const page of allResults) {
       const proj = page.properties['프로젝트']?.select?.name || '기타';
+      const pageTab = page.properties['탭']?.select?.name || 'memo';
       const title = page.properties['제목']?.title?.[0]?.plain_text || '';
       const date = page.properties['날짜']?.date?.start || '';
       const detail = page.properties['내용']?.rich_text?.[0]?.plain_text || '';
 
-      if (!projectMap[proj]) {
-        projectMap[proj] = { id: proj, name: proj, entries: [] };
+      const mapKey = `${pageTab}::${proj}`;
+      if (!projectMap[mapKey]) {
+        projectMap[mapKey] = { id: proj, name: proj, entries: [] };
       }
-      projectMap[proj].entries.push({ id: page.id, title, date, detail });
+      projectMap[mapKey].entries.push({ id: page.id, title, date, detail });
     }
 
     const projects = Object.values(projectMap);
@@ -84,7 +86,6 @@ while (response.has_more) {
         });
       }
 
-      // oldName 있으면 기존 피드백 전부 새 이름으로 이전
       if (oldName && oldName !== name) {
         const pages = await notion.databases.query({
           database_id: DB_ID,
