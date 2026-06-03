@@ -19,15 +19,11 @@ nav a:hover{color:#f0e8d8}
 .page.active{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .page.active{animation:fadeUp 0.5s ease forwards}
-
-/* Home */
 .home-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 52px);gap:16px;padding:40px}
 .home-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:#1e1a15;margin-bottom:32px;letter-spacing:-0.3px}
 .home-cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
 .home-card{width:200px;height:120px;background:#fff;border:1px solid #d4cdc0;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:#1e1a15;transition:transform .15s,box-shadow .15s}
 .home-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.08);border-color:#a89e8e}
-
-/* Memo */
 .memo-wrap{padding:48px 40px;max-width:760px;margin:0 auto}
 .memo-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:600;color:#1e1a15;margin-bottom:24px}
 .add-proj{display:flex;gap:8px;margin-bottom:20px}
@@ -106,7 +102,6 @@ nav a:hover{color:#f0e8d8}
   <span class="nav-editor" onclick="checkAdmin()">Editor</span>
 </nav>
 
-<!-- Home -->
 <div class="page active" id="page-home">
   <div class="home-wrap">
     <div class="home-title">H.G. Lee</div>
@@ -118,7 +113,6 @@ nav a:hover{color:#f0e8d8}
   </div>
 </div>
 
-<!-- Project Memo -->
 <div class="page" id="page-memo">
   <div class="memo-wrap">
     <div class="memo-title">Project Memo</div>
@@ -130,7 +124,6 @@ nav a:hover{color:#f0e8d8}
   </div>
 </div>
 
-<!-- Book -->
 <div class="page" id="page-book">
   <div class="memo-wrap">
     <div class="memo-title">Book</div>
@@ -142,7 +135,6 @@ nav a:hover{color:#f0e8d8}
   </div>
 </div>
 
-<!-- Workout -->
 <div class="page" id="page-workout">
   <div class="memo-wrap">
     <div class="memo-title">Workout</div>
@@ -177,6 +169,9 @@ let projects=[];
 let currentTab='memo';
 let openProjs=new Set();
 let openEntries=new Set();
+
+// detail 내용을 저장해두는 맵 (렌더 후 별도 주입용)
+let detailCache={};
 
 const palette=[
   ['#ffffff','#f2f2f2','#d9d9d9','#bfbfbf','#a6a6a6','#808080','#595959','#404040','#262626','#0d0d0d'],
@@ -250,25 +245,7 @@ function enableSave(eid){const btn=document.getElementById('savebtn_'+eid);if(bt
 function resetSize(){document.execCommand('removeFormat',false,null);}
 function insertHr(){document.execCommand('insertHTML',false,'<hr style="border:none;border-top:1px solid #d4cdc0;margin:8px 0;">');}
 function insertTable(){
-  const html=`<table style="border-collapse:collapse;width:100%;margin:6px 0">
-<thead><tr>
-<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목1</th>
-<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목2</th>
-<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목3</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-</tr>
-<tr>
-<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td>
-</tr>
-</tbody>
-</table><br>`;
+  const html='<table style="border-collapse:collapse;width:100%;margin:6px 0"><thead><tr><th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목1</th><th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목2</th><th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">제목3</th></tr></thead><tbody><tr><td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td><td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td><td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td></tr><tr><td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td><td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td><td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true"></td></tr></tbody></table><br>';
   document.execCommand('insertHTML',false,html);
 }
 
@@ -295,75 +272,50 @@ document.addEventListener('click',function(e){
 
 function tblAddRowBelow(){
   if(!ctxCell)return;
-  const tr=ctxCell.closest('tr');
-  const cols=tr.cells.length;
+  const tr=ctxCell.closest('tr');const cols=tr.cells.length;
   const newTr=document.createElement('tr');
-  for(let i=0;i<cols;i++){
-    const td=document.createElement('td');
-    td.style.cssText='border:1px solid #d4cdc0;padding:5px 10px';
-    td.contentEditable='true';
-    newTr.appendChild(td);
-  }
+  for(let i=0;i<cols;i++){const td=document.createElement('td');td.style.cssText='border:1px solid #d4cdc0;padding:5px 10px';td.contentEditable='true';newTr.appendChild(td);}
   tr.parentNode.insertBefore(newTr,tr.nextSibling);
   document.getElementById('tblCtx').classList.remove('show');
 }
-
 function tblAddRowAbove(){
   if(!ctxCell)return;
-  const tr=ctxCell.closest('tr');
-  const cols=tr.cells.length;
+  const tr=ctxCell.closest('tr');const cols=tr.cells.length;
   const newTr=document.createElement('tr');
-  for(let i=0;i<cols;i++){
-    const td=document.createElement('td');
-    td.style.cssText='border:1px solid #d4cdc0;padding:5px 10px';
-    td.contentEditable='true';
-    newTr.appendChild(td);
-  }
+  for(let i=0;i<cols;i++){const td=document.createElement('td');td.style.cssText='border:1px solid #d4cdc0;padding:5px 10px';td.contentEditable='true';newTr.appendChild(td);}
   tr.parentNode.insertBefore(newTr,tr);
   document.getElementById('tblCtx').classList.remove('show');
 }
-
 function tblAddColRight(){
   if(!ctxCell)return;
-  const table=ctxCell.closest('table');
-  const ci=ctxCell.cellIndex;
+  const table=ctxCell.closest('table');const ci=ctxCell.cellIndex;
   table.querySelectorAll('tr').forEach((tr,ri)=>{
     const cell=ri===0?document.createElement('th'):document.createElement('td');
     cell.style.cssText=ri===0?'border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500':'border:1px solid #d4cdc0;padding:5px 10px';
-    cell.contentEditable='true';
-    const ref=tr.cells[ci+1]||null;
-    tr.insertBefore(cell,ref);
+    cell.contentEditable='true';tr.insertBefore(cell,tr.cells[ci+1]||null);
   });
   document.getElementById('tblCtx').classList.remove('show');
 }
-
 function tblAddColLeft(){
   if(!ctxCell)return;
-  const table=ctxCell.closest('table');
-  const ci=ctxCell.cellIndex;
+  const table=ctxCell.closest('table');const ci=ctxCell.cellIndex;
   table.querySelectorAll('tr').forEach((tr,ri)=>{
     const cell=ri===0?document.createElement('th'):document.createElement('td');
     cell.style.cssText=ri===0?'border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500':'border:1px solid #d4cdc0;padding:5px 10px';
-    cell.contentEditable='true';
-    tr.insertBefore(cell,tr.cells[ci]);
+    cell.contentEditable='true';tr.insertBefore(cell,tr.cells[ci]);
   });
   document.getElementById('tblCtx').classList.remove('show');
 }
-
 function tblDelRow(){
   if(!ctxCell)return;
-  const tr=ctxCell.closest('tr');
-  const tbody=tr.parentNode;
+  const tr=ctxCell.closest('tr');const tbody=tr.parentNode;
   if(tbody.rows.length>1)tr.remove();
   document.getElementById('tblCtx').classList.remove('show');
 }
-
 function tblDelCol(){
   if(!ctxCell)return;
-  const table=ctxCell.closest('table');
-  const ci=ctxCell.cellIndex;
-  const totalCols=ctxCell.closest('tr').cells.length;
-  if(totalCols<=1)return;
+  const table=ctxCell.closest('table');const ci=ctxCell.cellIndex;
+  if(ctxCell.closest('tr').cells.length<=1)return;
   table.querySelectorAll('tr').forEach(tr=>{if(tr.cells[ci])tr.cells[ci].remove();});
   document.getElementById('tblCtx').classList.remove('show');
 }
@@ -377,12 +329,8 @@ document.addEventListener('paste',function(e){
   if(lines.length<2)return;
   e.preventDefault();
   const rows=lines.map(l=>l.split('|').filter((_,i,a)=>i>0&&i<a.length-1).map(c=>c.trim()));
-  const header=rows[0];
-  const body=rows.slice(1);
-  const html=`<table style="border-collapse:collapse;width:100%;margin:6px 0">
-<thead><tr>${header.map(h=>`<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">${h}</th>`).join('')}</tr></thead>
-<tbody>${body.map(r=>`<tr>${r.map(c=>`<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true">${c}</td>`).join('')}</tr>`).join('')}</tbody>
-</table><br>`;
+  const header=rows[0];const body=rows.slice(1);
+  const html='<table style="border-collapse:collapse;width:100%;margin:6px 0"><thead><tr>'+header.map(h=>'<th style="border:1px solid #d4cdc0;padding:5px 10px;background:#ede8de;font-weight:500" contenteditable="true">'+h+'</th>').join('')+'</tr></thead><tbody>'+body.map(r=>'<tr>'+r.map(c=>'<td style="border:1px solid #d4cdc0;padding:5px 10px" contenteditable="true">'+c+'</td>').join('')+'</tr>').join('')+'</tbody></table><br>';
   document.execCommand('insertHTML',false,html);
 });
 
@@ -390,9 +338,7 @@ function escHTML(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').
 function escAttr(s){return String(s).replace(/'/g,'&#39;');}
 
 function paletteHTML(eid){
-  return `<div class="color-palette" id="pal_${eid}">
-${palette.map(row=>`<div class="palette-row">${row.map(c=>`<div class="pc" style="background:${c}" onmousedown="event.preventDefault();fmtColor('${c}');togglePalette('${eid}')"></div>`).join('')}</div>`).join('')}
-</div>`;
+  return '<div class="color-palette" id="pal_'+eid+'">'+palette.map(function(row){return '<div class="palette-row">'+row.map(function(c){return '<div class="pc" style="background:'+c+'" onmousedown="event.preventDefault();fmtColor(\''+c+'\');togglePalette(\''+eid+'\')"></div>';}).join('')+'</div>';}).join('')+'</div>';
 }
 
 const today=()=>new Date().toISOString().slice(0,10);
@@ -422,63 +368,109 @@ async function loadTab(tab){
   }
 }
 
-function render(tab='memo'){
+function render(tab){
+  tab=tab||'memo';
   const elId='projects'+(tab==='memo'?'':'-'+tab);
   const el=document.getElementById(elId);
   const data=projectsData[tab]||[];
   if(!data.length){el.innerHTML='<div class="status">항목을 추가해보세요</div>';return;}
-  el.innerHTML=data.map(p=>`
-<div class="proj-card">
-  <div class="proj-header" onclick="toggleProj('${escAttr(p.id)}')">
-    <span class="proj-arrow ${openProjs.has(p.id)?'open':''}">&#9654;</span>
-    <span class="proj-name">${escHTML(p.name)}</span>
-    <span class="proj-count">${p.entries.length}개</span>
-    ${isAdmin?`<span class="proj-del" onclick="event.stopPropagation();renameProj('${escAttr(p.id)}','${escAttr(p.name)}')">수정</span>
-    <span class="proj-del" onclick="event.stopPropagation();delProj('${escAttr(p.id)}')">삭제</span>`:''}
-  </div>
-  <div class="proj-body ${openProjs.has(p.id)?'open':''}">
-    ${p.entries.length===0?'<div class="empty">피드백 없음</div>':p.entries.map(e=>`
-    <div class="entry">
-      <div class="entry-row" onclick="toggleEntry('${escAttr(e.id)}')">
-        <span class="entry-date">${escHTML(e.date)}</span>
-        <span class="entry-title">${escHTML(e.title)}</span>
-        ${isAdmin?`<span class="entry-del" onclick="event.stopPropagation();delEntry('${escAttr(p.id)}','${escAttr(e.id)}')">✕</span>`:''}
-      </div>
-      <div class="entry-detail ${openEntries.has(e.id)?'open':''}" id="ed_${escAttr(e.id)}">
-        ${isAdmin?`<div class="entry-edit-row">
-          <input type="date" id="edate_${escAttr(e.id)}" value="${escHTML(e.date)}" oninput="enableSave('${escAttr(e.id)}')">
-          <input type="text" id="etitle_${escAttr(e.id)}" value="${escHTML(e.title)}" placeholder="제목" oninput="enableSave('${escAttr(e.id)}')">
-        </div>`:`<div style="padding-left:88px;font-size:11px;color:#a89e8e;margin-bottom:8px">${escHTML(e.date)} · ${escHTML(e.title)}</div>`}
-        <div class="entry-toolbar" style="display:${isAdmin?'flex':'none'}">
-          <button onmousedown="event.preventDefault();fmt('bold')"><b>B</b></button>
-          <button onmousedown="event.preventDefault();fmt('italic')"><i>I</i></button>
-          <button onmousedown="event.preventDefault();fmt('underline')"><u>U</u></button>
-          <div class="sep"></div>
-          <button onmousedown="event.preventDefault();resetSize()" style="font-size:11px">S</button>
-          <button onmousedown="event.preventDefault();fmtSize(4)" style="font-size:13px">M</button>
-          <button onmousedown="event.preventDefault();fmtSize(6)" style="font-size:16px">L</button>
-          <div class="sep"></div>
-          <button onmousedown="event.preventDefault();insertHr()">—</button>
-          <div class="sep"></div>
-          <button onmousedown="event.preventDefault();insertTable()">표</button>
-          <div class="sep"></div>
-          <div class="color-trigger" onclick="togglePalette('${escAttr(e.id)}')">A</div>
-          ${paletteHTML(escAttr(e.id))}
-        </div>
-        <div class="entry-content" contenteditable="${isAdmin}" id="econtent_${escAttr(e.id)}" oninput="enableSave('${escAttr(e.id)}')">${e.detail||''}</div>
-        ${isAdmin?`<button class="save-btn" id="savebtn_${escAttr(e.id)}" onclick="saveEntry('${escAttr(e.id)}')" disabled>저장</button>`:''}
-      </div>
-    </div>`).join('')}
-    <div class="entry-add" style="display:${isAdmin?'block':'none'}">
-      <input type="date" class="entry-add-date" id="date_${escAttr(p.id)}" value="${today()}">
-      <div class="entry-add-row">
-        <input type="text" id="ttl_${escAttr(p.id)}" placeholder="제목" onkeydown="if(event.key==='Enter')addEntry('${escAttr(p.id)}')">
-        <input type="text" id="dtl_${escAttr(p.id)}" placeholder="내용 (선택)" onkeydown="if(event.key==='Enter')addEntry('${escAttr(p.id)}')">
-        <button onclick="addEntry('${escAttr(p.id)}')">추가</button>
-      </div>
-    </div>
-  </div>
-</div>`).join('');
+
+  // detail 캐시 초기화
+  detailCache={};
+
+  // 1단계: detail 내용 없이 골격만 렌더
+  var html='';
+  for(var pi=0;pi<data.length;pi++){
+    var p=data[pi];
+    html+='<div class="proj-card">';
+    html+='<div class="proj-header" onclick="toggleProj(\''+escAttr(p.id)+'\')">';
+    html+='<span class="proj-arrow '+(openProjs.has(p.id)?'open':'')+'">&#9654;</span>';
+    html+='<span class="proj-name">'+escHTML(p.name)+'</span>';
+    html+='<span class="proj-count">'+p.entries.length+'개</span>';
+    if(isAdmin){
+      html+='<span class="proj-del" onclick="event.stopPropagation();renameProj(\''+escAttr(p.id)+'\',\''+escAttr(p.name)+'\')">수정</span>';
+      html+='<span class="proj-del" onclick="event.stopPropagation();delProj(\''+escAttr(p.id)+'\')">삭제</span>';
+    }
+    html+='</div>'; // proj-header 닫기
+
+    html+='<div class="proj-body '+(openProjs.has(p.id)?'open':'')+'">';
+
+    if(p.entries.length===0){
+      html+='<div class="empty">피드백 없음</div>';
+    } else {
+      for(var ei=0;ei<p.entries.length;ei++){
+        var e=p.entries[ei];
+        var eid=escAttr(e.id);
+
+        // detail 내용은 캐시에 저장, HTML에는 빈 div만
+        detailCache[e.id]=e.detail||'';
+
+        html+='<div class="entry">';
+        html+='<div class="entry-row" onclick="toggleEntry(\''+eid+'\')">';
+        html+='<span class="entry-date">'+escHTML(e.date)+'</span>';
+        html+='<span class="entry-title">'+escHTML(e.title)+'</span>';
+        if(isAdmin) html+='<span class="entry-del" onclick="event.stopPropagation();delEntry(\''+escAttr(p.id)+'\',\''+eid+'\')">✕</span>';
+        html+='</div>'; // entry-row 닫기
+
+        html+='<div class="entry-detail '+(openEntries.has(e.id)?'open':'')+'" id="ed_'+eid+'">';
+
+        if(isAdmin){
+          html+='<div class="entry-edit-row">';
+          html+='<input type="date" id="edate_'+eid+'" value="'+escHTML(e.date)+'" oninput="enableSave(\''+eid+'\')">';
+          html+='<input type="text" id="etitle_'+eid+'" value="'+escHTML(e.title)+'" placeholder="제목" oninput="enableSave(\''+eid+'\')">';
+          html+='</div>';
+          html+='<div class="entry-toolbar">';
+          html+='<button onmousedown="event.preventDefault();fmt(\'bold\')"><b>B</b></button>';
+          html+='<button onmousedown="event.preventDefault();fmt(\'italic\')"><i>I</i></button>';
+          html+='<button onmousedown="event.preventDefault();fmt(\'underline\')"><u>U</u></button>';
+          html+='<div class="sep"></div>';
+          html+='<button onmousedown="event.preventDefault();resetSize()" style="font-size:11px">S</button>';
+          html+='<button onmousedown="event.preventDefault();fmtSize(4)" style="font-size:13px">M</button>';
+          html+='<button onmousedown="event.preventDefault();fmtSize(6)" style="font-size:16px">L</button>';
+          html+='<div class="sep"></div>';
+          html+='<button onmousedown="event.preventDefault();insertHr()">—</button>';
+          html+='<div class="sep"></div>';
+          html+='<button onmousedown="event.preventDefault();insertTable()">표</button>';
+          html+='<div class="sep"></div>';
+          html+='<div class="color-trigger" onclick="togglePalette(\''+eid+'\')">A</div>';
+          html+=paletteHTML(eid);
+          html+='</div>'; // entry-toolbar 닫기
+        } else {
+          html+='<div style="padding-left:88px;font-size:11px;color:#a89e8e;margin-bottom:8px">'+escHTML(e.date)+' · '+escHTML(e.title)+'</div>';
+        }
+
+        // entry-content는 빈 상태로 — 아래에서 별도 주입
+        html+='<div class="entry-content" contenteditable="'+isAdmin+'" id="econtent_'+eid+'" oninput="enableSave(\''+eid+'\')"></div>';
+
+        if(isAdmin) html+='<button class="save-btn" id="savebtn_'+eid+'" onclick="saveEntry(\''+eid+'\')" disabled>저장</button>';
+
+        html+='</div>'; // entry-detail 닫기
+        html+='</div>'; // entry 닫기
+      }
+    }
+
+    if(isAdmin){
+      html+='<div class="entry-add">';
+      html+='<input type="date" class="entry-add-date" id="date_'+escAttr(p.id)+'" value="'+today()+'">';
+      html+='<div class="entry-add-row">';
+      html+='<input type="text" id="ttl_'+escAttr(p.id)+'" placeholder="제목" onkeydown="if(event.key===\'Enter\')addEntry(\''+escAttr(p.id)+'\')">';
+      html+='<input type="text" id="dtl_'+escAttr(p.id)+'" placeholder="내용 (선택)" onkeydown="if(event.key===\'Enter\')addEntry(\''+escAttr(p.id)+'\')">';
+      html+='<button onclick="addEntry(\''+escAttr(p.id)+'\')">추가</button>';
+      html+='</div>';
+      html+='</div>'; // entry-add 닫기
+    }
+
+    html+='</div>'; // proj-body 닫기
+    html+='</div>'; // proj-card 닫기
+  }
+
+  el.innerHTML=html;
+
+  // 2단계: detail 내용을 별도로 주입 (깨진 HTML이 구조 못 깨뜨림)
+  for(var id in detailCache){
+    var contentEl=document.getElementById('econtent_'+id);
+    if(contentEl) contentEl.innerHTML=detailCache[id];
+  }
 }
 
 function toggleProj(id){if(openProjs.has(id))openProjs.delete(id);else openProjs.add(id);render(currentTab);}
