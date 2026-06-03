@@ -1,4 +1,4 @@
-const { Client } = require('@notionhq/client');
+onst { Client } = require('@notionhq/client');
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const DB_ID = process.env.NOTION_DB_ID;
 
@@ -47,12 +47,19 @@ module.exports = async (req, res) => {
 
     for (const page of allResults) {
       const proj = page.properties['프로젝트']?.select?.name || '기타';
-      const pageTab = page.properties['탭']?.select?.name || 'memo';
+      const pageTab = page.properties['탭']?.select?.name || '';
       const title = page.properties['제목']?.title?.[0]?.plain_text || '';
       const date = page.properties['날짜']?.date?.start || '';
       const detail = page.properties['내용']?.rich_text?.[0]?.plain_text || '';
 
-      const mapKey = `${pageTab}::${proj}`;
+      // JS 레벨 이중 필터: 요청 탭과 불일치하면 스킵
+      if (tab === 'memo') {
+        if (pageTab && pageTab !== 'memo') continue;
+      } else {
+        if (pageTab !== tab) continue;
+      }
+
+      const mapKey = tab + '::' + proj;
       if (!projectMap[mapKey]) {
         projectMap[mapKey] = { id: proj, name: proj, entries: [] };
       }
