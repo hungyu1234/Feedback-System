@@ -4,5 +4,6 @@
     { "source": "/api/entries/:id", "destination": "/api/entries?id=:id" },
     { "source": "/api/about", "destination": "/api/about" },
     { "source": "/api/files", "destination": "/api/files" }
+      { "source": "/api/read-file", "destination": "/api/read-file" }
   ]
 }
