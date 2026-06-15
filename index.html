@@ -114,6 +114,22 @@ nav a:hover{color:#f0ebe0}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#e8e0d0;padding:10px 16px;font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none;font-family:'Noto Sans KR',sans-serif}
 .toast.show{opacity:1}
 
+.file-upload-btn{height:22px;padding:0 7px;background:var(--white);border:1px solid var(--border);color:var(--ink2);font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;display:inline-flex;align-items:center;gap:3px}
+.file-upload-btn:hover{background:var(--bg)}
+.file-area{margin-left:96px;margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+.file-item{display:flex;align-items:center;gap:6px;background:var(--white);border:1px solid var(--border);padding:6px 10px;font-size:12px;color:var(--ink2);font-family:'Noto Sans KR',sans-serif;max-width:260px;position:relative}
+.file-item a{color:var(--ink);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px;display:inline-block}
+.file-item a:hover{text-decoration:underline}
+.file-item .file-del{font-size:10px;color:var(--ink3);cursor:pointer;border:none;background:none;padding:0 2px;margin-left:auto}
+.file-item .file-del:hover{color:#c05050}
+.file-item .file-icon{font-size:14px;flex-shrink:0}
+.file-thumb{width:48px;height:48px;object-fit:cover;border:1px solid var(--border);cursor:pointer;flex-shrink:0}
+.file-uploading{opacity:.5;pointer-events:none}
+
+@media(max-width:600px){
+  .file-area{margin-left:0}
+}
+
 @media(max-width:600px){
   nav{padding:0 20px;gap:20px}
   nav a{font-size:11px;letter-spacing:1px}
@@ -200,6 +216,7 @@ nav a:hover{color:#f0ebe0}
 </div>
 
 <div class="toast" id="toast"></div>
+<input type="file" id="fileInput" style="display:none" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip" multiple>
 <div class="tbl-ctx" id="tblCtx">
   <div class="tbl-ctx-item" onclick="tblAddRowBelow()">아래에 행 추가</div>
   <div class="tbl-ctx-item" onclick="tblAddRowAbove()">위에 행 추가</div>
@@ -305,12 +322,13 @@ function render(tab){
         html+='</div><div class="entry-detail '+(openEntries.has(e.id)?'open':'')+'" id="ed_'+eid+'">';
         if(isAdmin){
           html+='<div class="entry-edit-row"><input type="date" id="edate_'+eid+'" value="'+escHTML(e.date)+'" oninput="enableSave(\''+eid+'\')"><input type="text" id="etitle_'+eid+'" value="'+escHTML(e.title)+'" oninput="enableSave(\''+eid+'\')"></div>';
-          html+='<div class="entry-toolbar"><button onmousedown="event.preventDefault();fmt(\'bold\')"><b>B</b></button><button onmousedown="event.preventDefault();fmt(\'italic\')"><i>I</i></button><button onmousedown="event.preventDefault();fmt(\'underline\')"><u>U</u></button><div class="sep"></div><button onmousedown="event.preventDefault();resetSize()" style="font-size:10px">S</button><button onmousedown="event.preventDefault();fmtSize(4)" style="font-size:12px">M</button><button onmousedown="event.preventDefault();fmtSize(6)" style="font-size:15px">L</button><div class="sep"></div><button onmousedown="event.preventDefault();insertHr()">—</button><div class="sep"></div><button onmousedown="event.preventDefault();insertTable()">표</button><div class="sep"></div><div class="color-trigger" onclick="togglePalette(\''+eid+'\')">A</div>'+paletteHTML(eid)+'</div>';
+          html+='<div class="entry-toolbar"><button onmousedown="event.preventDefault();fmt(\'bold\')"><b>B</b></button><button onmousedown="event.preventDefault();fmt(\'italic\')"><i>I</i></button><button onmousedown="event.preventDefault();fmt(\'underline\')"><u>U</u></button><div class="sep"></div><button onmousedown="event.preventDefault();resetSize()" style="font-size:10px">S</button><button onmousedown="event.preventDefault();fmtSize(4)" style="font-size:12px">M</button><button onmousedown="event.preventDefault();fmtSize(6)" style="font-size:15px">L</button><div class="sep"></div><button onmousedown="event.preventDefault();insertHr()">—</button><div class="sep"></div><button onmousedown="event.preventDefault();insertTable()">표</button><div class="sep"></div><div class="color-trigger" onclick="togglePalette(\''+eid+'\')">A</div>'+paletteHTML(eid)+'<div class="sep"></div><button class="file-upload-btn" onclick="triggerFileUpload(\''+eid+'\')">📎 파일</button></div>';
         }else{
           html+='<div style="padding-left:96px;font-size:12px;color:var(--ink3);margin-bottom:8px">'+escHTML(e.date)+' · '+escHTML(e.title)+'</div>';
         }
         html+='<div class="entry-content" contenteditable="'+isAdmin+'" id="econtent_'+eid+'" oninput="enableSave(\''+eid+'\')"></div>';
         if(isAdmin)html+='<button class="save-btn" id="savebtn_'+eid+'" onclick="saveEntry(\''+eid+'\')" disabled>저장</button>';
+        html+='<div class="file-area" id="files_'+eid+'"></div>';
         html+='</div></div>';
       }
     }
@@ -319,9 +337,10 @@ function render(tab){
   }
   el.innerHTML=html;
   for(var id in detailCache){var cel=document.getElementById('econtent_'+id);if(cel)cel.innerHTML=detailCache[id];}
+  openEntries.forEach(function(eid){setTimeout(function(){loadFiles(eid);},50);});
 }
 function toggleProj(id){if(openProjs.has(id))openProjs.delete(id);else openProjs.add(id);render(currentTab);}
-function toggleEntry(id){if(openEntries.has(id))openEntries.delete(id);else openEntries.add(id);render(currentTab);}
+function toggleEntry(id){if(openEntries.has(id))openEntries.delete(id);else{openEntries.add(id);setTimeout(()=>loadFiles(id),100);}render(currentTab);}
 async function renameProj(id,oldName){const n=prompt('새 이름:',oldName);if(!n||n===oldName)return;showToast('수정 중...');const r=await req('POST','projects',{name:n,oldName:id,tab:currentTab});if(r.id){const p=projectsData[currentTab].find(p=>p.id===id);p.name=n;p.id=n;openProjs.add(n);openProjs.delete(id);render(currentTab);showToast('수정됨');}}
 async function saveEntry(eid){const title=document.getElementById('etitle_'+eid).value.trim();const date=document.getElementById('edate_'+eid).value;const detail=document.getElementById('econtent_'+eid).innerHTML;if(!title)return;showToast('저장 중...');await req('PATCH','entries/'+eid,{title,date,detail});for(const p of projectsData[currentTab]){const e=p.entries.find(x=>x.id===eid);if(e){e.title=title;e.date=date;e.detail=detail;break;}}render(currentTab);showToast('저장됨');}
 async function addProj(){const el=document.getElementById('projInput');const name=el.value.trim();if(!name)return;showToast('추가 중...');const r=await req('POST','projects',{name,tab:'memo'});if(r.id){projectsData.memo.push({id:r.id,name,entries:[]});openProjs.add(r.id);el.value='';render('memo');showToast('추가됨');}else showToast('오류: '+(r.error||''));}
@@ -329,6 +348,66 @@ async function addProjGeneric(tab){const inputId=tab==='book'?'projInputBook':'p
 async function delProj(id){if(!confirm('삭제할까요?'))return;await req('DELETE','projects',{name:id});projectsData[currentTab]=projectsData[currentTab].filter(p=>p.id!==id);openProjs.delete(id);render(currentTab);showToast('삭제됨');}
 async function addEntry(pid){const ttl=document.getElementById('ttl_'+pid).value.trim();const dtl=document.getElementById('dtl_'+pid).value.trim();const dt=document.getElementById('date_'+pid).value;if(!ttl)return;const r=await req('POST','entries',{projectId:pid,title:ttl,detail:dtl,date:dt,tab:currentTab});if(r.id){projectsData[currentTab].find(p=>p.id===pid).entries.push({id:r.id,date:dt,title:ttl,detail:dtl});document.getElementById('ttl_'+pid).value='';document.getElementById('dtl_'+pid).value='';render(currentTab);showToast('추가됨');}}
 async function delEntry(pid,eid){await req('DELETE','entries/'+eid);const p=projectsData[currentTab].find(p=>p.id===pid);p.entries=p.entries.filter(e=>e.id!==eid);openEntries.delete(eid);render(currentTab);showToast('삭제됨');}
+
+let currentUploadEid=null;
+const fileInput=document.getElementById('fileInput');
+function triggerFileUpload(eid){currentUploadEid=eid;fileInput.click();}
+fileInput.addEventListener('change',async function(){
+  if(!fileInput.files.length||!currentUploadEid)return;
+  const eid=currentUploadEid;
+  for(const file of fileInput.files){
+    if(file.size>3500000){showToast('파일 크기 초과 (3.3MB 이하)');continue;}
+    await uploadOneFile(eid,file);
+  }
+  fileInput.value='';
+  currentUploadEid=null;
+});
+async function uploadOneFile(eid,file){
+  showToast('업로드 중: '+file.name);
+  const base64=await fileToBase64(file);
+  try{
+    const r=await req('POST','upload',{pageId:eid,file:base64,filename:file.name,contentType:file.type});
+    if(r.ok){showToast('업로드 완료: '+file.name);loadFiles(eid);}
+    else{showToast('업로드 실패: '+(r.error||''));}
+  }catch(e){showToast('업로드 오류: '+e.message);}
+}
+function fileToBase64(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=reject;reader.readAsDataURL(file);});}
+
+async function loadFiles(eid){
+  const area=document.getElementById('files_'+eid);
+  if(!area)return;
+  try{
+    const r=await fetch('/api/files?pageId='+eid);
+    const data=await r.json();
+    if(!data.files||data.files.length===0){area.innerHTML='';return;}
+    let html='';
+    for(const f of data.files){
+      const isImg=f.type==='image';
+      if(isImg&&f.url){
+        html+='<div class="file-item"><img src="'+escAttr(f.url)+'" class="file-thumb" onclick="window.open(\''+escAttr(f.url)+'\',\'_blank\')">';
+      }else{
+        const icon=f.type==='pdf'?'📄':f.type==='video'?'🎬':f.type==='audio'?'🎵':'📎';
+        html+='<div class="file-item"><span class="file-icon">'+icon+'</span>';
+        if(f.url)html+='<a href="'+escAttr(f.url)+'" target="_blank" title="'+escHTML(f.name)+'">'+escHTML(f.name||'파일')+'</a>';
+        else html+='<span>'+escHTML(f.name||'파일')+'</span>';
+      }
+      if(isAdmin)html+='<button class="file-del" onclick="delFile(\''+escAttr(eid)+'\',\''+escAttr(f.blockId)+'\')">✕</button>';
+      html+='</div>';
+    }
+    area.innerHTML=html;
+  }catch(e){area.innerHTML='';}
+}
+
+async function delFile(eid,blockId){
+  if(!confirm('첨부파일을 삭제할까요?'))return;
+  showToast('삭제 중...');
+  try{
+    await fetch('/api/files?blockId='+blockId,{method:'DELETE'});
+    showToast('삭제됨');
+    loadFiles(eid);
+  }catch(e){showToast('삭제 실패');}
+}
+
 load();
 </script>
 </body>
